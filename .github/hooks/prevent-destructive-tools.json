@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "disableAllHooks": false,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "command": "python3 -c \"import sys, json; payload = json.load(sys.stdin); cmd = payload.get('toolCall', {}).get('arguments', {}).get('CommandLine', ''); is_destructive = any(x in cmd for x in ['rm -rf /', 'mkfs', 'dd if=', 'shutdown']); sys.exit(1 if is_destructive else 0)\""
+      }
+    ]
+  }
+}

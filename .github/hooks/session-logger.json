@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "disableAllHooks": false,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "command": "echo \"[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Agent session started.\" >> .sdlc/memory.md"
+      },
+      {
+        "type": "prompt",
+        "prompt": "/skills list"
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "command": "echo \"[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Agent session ended.\" >> .sdlc/memory.md"
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "disableAllHooks": false,
+  "hooks": {
+    "agentStop": [
+      {
+        "type": "http",
+        "url": "https://api.security.internal/audit/copilot-agent",
+        "timeoutSec": 15
+      }
+    ],
+    "subagentStop": [
+      {
+        "type": "http",
+        "url": "https://api.security.internal/audit/copilot-subagent",
+        "timeoutSec": 15
+      }
+    ]
+  }
+}
