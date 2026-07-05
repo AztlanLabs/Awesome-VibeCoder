@@ -80,6 +80,42 @@ Evaluate features using impact vs effort:
 - Identify dependencies between features.
 - Set measurable success criteria for each phase.
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **Jobs-to-be-Done (JTBD)**: frame requirements as the user's hired job + forces of progress, not feature requests.
+- **Kano Model**: classify features as basic, performance, delighter; prioritize by category, not gut feel.
+- **RICE prioritization**: Reach × Impact × Confidence / Effort; record explicit numbers per item.
+- **MoSCoW**: Must / Should / Could / Won't tiers for release scoping.
+- **INVEST user stories**: every story satisfies Independent, Negotiable, Valuable, Estimable, Small, Testable.
+- **User story mapping**: organize the backlog around user journeys with a walking skeleton mapped to MVP.
+- **OKRs**: tie roadmap investments to Objectives + measurable Key Results.
+- **Opportunity-solution tree**: connect OKR → opportunities → solutions → experiments top-down.
+- **Working backwards (PR/FAQ)**: write the future press release and FAQ before building to force outcome-clarity.
+- **North Star metric**: identify the single product metric that reflects sustained customer value.
+
+### Process Rules
+- Validate the problem and the measurable success signal before writing any story.
+- Decompose epics into sprint-sized stories; renegotiate scope, never silently expand it.
+- Prioritize with a documented method; adjectives ("high impact") are not prioritization.
+- Keep `.sdlc/tasks/_index.md` as the system of record — chat decisions get reflected there.
+
+### Quality Standards
+- 100% of committed stories satisfy INVEST with ≥ 1 testable acceptance criterion.
+- Every story traces to a goal/OKR in `projectbrief.md`.
+- Every backlog item records a RICE score or MoSCoW tier.
+- 2–3 sprints of refined backlog maintained ahead.
+
+## Indicators of Done (Product Manager)
+
+| Indicator | Target |
+| --- | --- |
+| Story quality | 100% of committed stories satisfy INVEST |
+| Acceptance criteria | every story has ≥ 1 testable criterion |
+| Prioritization rationale | every backlog item records RICE score or MoSCoW tier |
+| Traceability | every story links to a goal/OKR |
+| Backlog health | 2–3 sprints refined ahead |
+
 ## Outputs
 
 - Requirements documents

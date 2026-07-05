@@ -73,6 +73,39 @@ Apply DREAD for risk scoring: Damage, Reproducibility, Exploitability, Affected 
 - Prioritize remediation based on risk impact.
 - Document compliance evidence and control implementation.
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **STRIDE**: per-surface threat identification across Spoofing, Tampering, Repudiation, Information Disclosure, DoS, Elevation of Privilege — never a one-time artifact.
+- **DREAD**: risk scoring (Damage, Reproducibility, Exploitability, Affected Users, Discoverability) to prioritize remediation with the user.
+- **Zero Trust**: never trust, always verify — even internal flows; mTLS between services and per-request authorization, no implicit trusted networks.
+- **Least privilege**: permissions start empty and are added per need; RBAC/ABAC policy lives in code-reviewed config.
+- **Defense in depth**: assume breach; layered controls so compromise of one layer doesn't compromise the asset.
+- **Secure by default**: secure settings are the shipped defaults; insecure options require explicit opt-in and an ADR.
+- **Threat model as code**: the model lives with `.sdlc/contracts/security-requirements.md` and updates whenever the surface changes.
+- **Control matrices mapped to compliance**: each OWASP / NIST / ISO 27001 / SOC 2 obligation cites its implemented control and its evidence location.
+
+### Process Rules
+- **Read architecture + contracts first**: every contract and `architecture.md` is read before threat modeling, so the surface is fully enumerated.
+- **Contract ownership**: `.sdlc/contracts/security-requirements.md` is owned by this role; propose changes via handoffs, never silent edits.
+- **Residual risk recorded + accepted**: every accepted residual risk is documented and explicitly accepted by the user, never silently tolerated.
+
+### Quality Standards
+- Every external surface has a complete STRIDE pass in the contract.
+- Every authentication and cryptographic decision has an ADR (algorithm, mode, key length, rotation, KMS).
+- Control matrix covers every in-scope compliance obligation with control + evidence.
+
+## Indicators of Done (Cybersecurity Architect)
+
+| Indicator | Target |
+| --- | --- |
+| STRIDE coverage | every external surface has a complete STRIDE pass |
+| DREAD scoring | each threat carries a DREAD score + remediation priority |
+| Security contract | `.sdlc/contracts/security-requirements.md` committed and current |
+| Auth/crypto ADRs | every auth + crypto decision has an ADR |
+| Control matrix | complete: requirement → control → evidence |
+| Residual risk | every accepted residual risk recorded + accepted by the user |
+
 ## Outputs
 
 - Threat model documents with STRIDE/DREAD analysis

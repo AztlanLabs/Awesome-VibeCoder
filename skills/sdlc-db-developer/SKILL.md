@@ -17,13 +17,13 @@ Use when the task involves:
 
 ## Centralized State Architecture
 
-On startup, verify the `.sdlc/` workspace state directory. Load the shared state baseline and record all progress and deliverables inside `.sdlc/` state files.
+On startup, verify the `.sdlc/` workspace state directory and load the shared state baseline. `.sdlc/` tracks tasks and progress — migration scripts and SQL always go into the project's real source tree.
 
 1. Read `contracts/db-schema.md` on startup to understand target schema.
 2. Claim database tasks from `tasks/_index.md`.
-3. Implement migrations from DB Architect's schema designs.
-4. Write performance reports and update task status on completion.
-5. Append completion details and artifact paths to `.sdlc/memory.md`.
+3. Implement migrations from DB Architect's schema designs in the real source tree, then actually apply the migration and run the database test suite; fix failures and re-run until green.
+4. Write performance reports and update task status on completion, citing the exact command run and result.
+5. Append the artifact paths and verification result (not a prose summary) to `.sdlc/memory.md`.
 
 ## Core Capabilities
 
@@ -85,13 +85,46 @@ COMMIT;
 - Generate volume test data for performance benchmarking.
 - Implement data masking for sensitive test data.
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **Parameterized queries only**: no string concatenation or interpolation of user input into SQL — in app code, stored procedures, or admin scripts.
+- **EXPLAIN-driven indexing**: every non-trivial query ships with a reviewed execution plan; index changes are driven by plan analysis, not by guessing.
+- **Expand-contract migrations (reversible)**: add → backfill → dual-write → migrate reads → drop; UP and DOWN both exist and DOWN is exercised.
+- **Transaction boundaries minimal**: open late, close early; no I/O, network calls, or user waits inside an open transaction; isolation chosen per workload and justified.
+- **Read replicas for read-heavy paths**: route reads to replicas where freshness tolerance allows; writes always hit primary.
+- **Optimistic vs pessimistic concurrency**: optimistic for low-contention resources; pessimistic locks only on hot rows, with bounded hold time and explicit retry policy.
+- **Batch over loop**: row-by-row loops collapse into batched `INSERT ... VALUES (...), (...)` and `UPDATE ... FROM (VALUES ...)`.
+
+### Process Rules
+- **Read the schema contract first**: `.sdlc/contracts/db-schema.md` defines the target shape; never drift from it without a contract change.
+- **Migrations actually run**: applied via `execute` against a real or test DB, not described as "done."
+- **Performance evidence in `progress.md`**: cite the exact command and result for migrations and tests.
+
+### Quality Standards
+- Every migration has a tested DOWN script and is reversible.
+- Every non-trivial query has an EXPLAIN capture in the project; no unexplained scans or spills.
+- p95 latency ≤ the budget declared per access path.
+- No N+1: request-path query count verified ≤ expected in tests.
+
+## Indicators of Done (DB Developer)
+
+| Indicator | Target |
+| --- | --- |
+| Migration reversibility | every migration's DOWN runs cleanly |
+| Query plan review | EXPLAIN captured for every non-trivial query |
+| p95 query latency | within budget per access path |
+| N+1 elimination | query count per request path verified ≤ expected |
+| Lock & 2PC bounds | transactions short and isolation-justified |
+| Migrations applied | actually run; `progress.md` cites the command + result |
+
 ## Outputs
 
-- Optimized SQL queries and stored procedures
-- Migration scripts with UP/DOWN pairs
+- Optimized SQL queries and stored procedures, applied against a real or test database
+- Migration scripts with UP/DOWN pairs, actually run and verified
 - Performance analysis reports with execution plans
 - Seed data and test fixture scripts
-- Task status updates (team mode)
+- Task status updates citing the real command run and result (team mode)
 
 ## Boundaries
 

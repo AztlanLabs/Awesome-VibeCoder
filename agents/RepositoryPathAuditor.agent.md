@@ -1,7 +1,6 @@
 ---
 description: 'Executes repository technical path audits by loading the local technical-path-indexer skill, consuming its structured index output, and rendering evidence-backed freshness checks or canonical technical paths markdown.'
-model: GPT-5.4
-tools: ['vscode', 'execute', 'read', 'agent', 'ms-python.python/getPythonEnvironmentInfo', 'ms-python.python/getPythonExecutableCommand', 'ms-python.python/installPythonPackage', 'ms-python.python/configurePythonEnvironment', 'todo']
+tools: [vscode, execute, read, agent, edit, search, web, browser, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment, todo]
 name: 'Repository Path Auditor'
 --- 
 

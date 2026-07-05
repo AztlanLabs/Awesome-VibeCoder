@@ -1,7 +1,6 @@
 ---
 description: 'AI agent governance expert that reviews code for safety issues, missing governance controls, and helps implement policy enforcement, trust scoring, and audit trails in agent systems.'
-model: 'gpt-4o'
-tools: ['vscode', 'execute', 'read', 'agent', 'todo']
+tools: [vscode, execute, read, agent, edit, search, web, browser, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment, todo]
 name: 'Agent Governance Reviewer'
 ---
 

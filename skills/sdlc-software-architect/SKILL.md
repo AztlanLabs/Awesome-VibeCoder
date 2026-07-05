@@ -80,6 +80,38 @@ Create ADRs following the Nygard format:
 - [Option and why rejected]
 ```
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **C4 model**: describe the system at Context, Container, Component, and Code levels; default to the first three and expand to Code only where it adds clarity.
+- **Bounded contexts**: align service boundaries with domain bounded contexts; define published/consumed contracts at each seam (anti-corruption layer where contexts meet).
+- **Event-driven where latency/decoupling matter**: async integration via events/streams; keep synchronous calls for request/response queries that must be consistent.
+- **Strangler Fig for legacy migration**: incrementally replace legacy components behind a routing/façade, never a big-bang rewrite.
+- **Evolutionary architecture**: favor reversible decisions, fitness functions, and replaceable components over irreversible commitments.
+
+### Process Rules
+- **Contract-first**: schema/contracts are committed and reviewed before implementation roles write code; the architect signs off on contract edits.
+- **One ADR per significant decision**: framework, boundary, persistence, integration, or constraint reversal each get their own ADR before the decision is acted on.
+- **Trade-off matrices for technology selection**: options scored against project constraints (team expertise, timeline, budget, scalability); the losing alternatives are recorded with rejection rationale.
+- **Handoffs on finalization**: implementation roles receive a handoff only after architecture deliverables are stable and contract-consistent.
+
+### Quality Standards
+- **Architecture completeness**: every component in `architecture.md` has a C4 diagram, declared boundaries, and listed interactions.
+- **Performance budgets declared**: latency, throughput, and bundle budgets recorded in `systemPatterns.md` before implementation gates open.
+- **ADR coverage**: 0 significant technical decisions without a corresponding ADR; every ADR has a Context/Decision/Consequences/Alternatives block.
+- **Cross-role contract consistency**: every `contracts/*.md` reviewed for boundary alignment before implementation.
+
+## Indicators of Done (Software Architect)
+
+| Indicator | Target |
+| --- | --- |
+| ADRs created | one ADR per significant decision; `decisions/_index.md` lists all |
+| `architecture.md` | C4 Context + Container + Component diagrams present with mermaid |
+| `systemPatterns.md` | patterns + performance/bundle budgets declared |
+| Trade-off matrices | every technology recommendation backed by a scored matrix |
+| Contract consistency | 100% of `contracts/*.md` reviewed; drift returned to owner via handoff |
+| Handoffs to impl roles | one handoff per downstream role before the implementation gate |
+
 ## Outputs
 
 - Architecture overview documents with mermaid diagrams

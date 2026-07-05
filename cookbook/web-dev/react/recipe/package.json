@@ -1,0 +1,23 @@
+{
+  "name": "web-dev-react-recipes",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "data-fetching-suspense": "tsx data-fetching-suspense.tsx",
+    "form-actions": "tsx form-actions.tsx",
+    "optimistic-updates": "tsx optimistic-updates.tsx",
+    "compound-components": "tsx compound-components.tsx",
+    "error-boundaries": "tsx error-boundaries.tsx"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

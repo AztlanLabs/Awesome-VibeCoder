@@ -34,7 +34,9 @@ Initialize the `.sdlc/` workspace first. The `.sdlc/` shared state handles concu
 │  sdlc-db-developer      │  → migrations, stored procedures
 │  sdlc-developer         │  → feature code
 └─────────────────────────┘
-         │ GATE: all implementation tasks complete
+         │ GATE: every implementation task's build + tests actually run and passing
+         │       (per-agent Definition of Done), evidenced in progress.md —
+         │       not merely marked COMPLETED
          ▼
 ```
 
@@ -48,7 +50,8 @@ Initialize the `.sdlc/` workspace first. The `.sdlc/` shared state handles concu
 │  sdlc-qa-tester         │  → test suites, quality reports
 │  sdlc-responsible-ai    │  → review reports, ethical ADRs
 └─────────────────────────┘
-         │ GATE: all quality gates passed
+         │ GATE: quality gates passed with real, last-run pass/fail/coverage
+         │       numbers in test-strategy.md/progress.md — not aspirational targets
          ▼
 ```
 

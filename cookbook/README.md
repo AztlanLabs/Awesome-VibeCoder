@@ -15,6 +15,19 @@ Ready-to-use recipes for building with the GitHub Copilot SDK across multiple la
   - Runnable examples for each language
   - Best practices and complete implementation guides
 
+### Web Development
+
+Production recipes for the modern web stack — pure framework idioms, runnable TypeScript examples, no Copilot SDK required.
+
+- **[Web Development Cookbook](web-dev/)** - Recipes for Node.js, React, Next.js, Astro, Svelte, and Vue
+  - Node.js: streaming, graceful shutdown, structured logging, worker pools, rate limiting
+  - React 19: `use()`/Suspense, form actions, optimistic updates, compound components, error boundaries
+  - Next.js 16: Server Actions, middleware auth, streaming SSR, streaming route handlers, on-demand ISR
+  - Astro 5: content collections, islands hydration
+  - Svelte 5: runes reactivity, transitions & actions
+  - Vue 3: composables + Pinia, SFC `<script setup>`
+  - Each recipe ships a runnable `.ts`/`.tsx` example and a best-practices checklist
+
 ## Getting Started
 
 1. Browse the tool or product folder that matches what you want to build

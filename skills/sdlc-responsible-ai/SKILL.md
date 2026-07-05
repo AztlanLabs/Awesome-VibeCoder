@@ -67,6 +67,43 @@ On startup, verify the `.sdlc/` workspace state directory. Load the shared state
 - Verify name fields accept international characters and formats.
 - Test with assistive technologies (screen readers, switch access).
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **NIST AI RMF**: Govern, Map, Measure, Manage — structure reviews across the AI lifecycle.
+- **Fairness metrics**: demographic parity, equalized odds, and group-specific performance deltas — quantify, don't assert.
+- **Model cards**: document intended use, limitations, training-data summary, and performance by segment.
+- **Datasheets for datasets**: record dataset provenance, composition, collection method, and consent for any model-trained corpus.
+- **Adversarial / red-teaming**: probe the model with diverse, edge-case, and malicious inputs before release.
+- **Human-in-the-loop tiers**: override → real-time review → post-hoc audit → none; tier by decision impact.
+- **Differential privacy basics**: noise budgets and aggregation limits for analytics on sensitive populations.
+- **PII minimization**: collect least-necessary, redact, and bound retention with deletion timelines.
+- **WCAG 2.2 AA**: 4.5:1 / 3:1 contrast, keyboard reach, focus-visible, screen-reader announced.
+- **Transparency notices**: disclose AI use and limitations to end users with a documented notice.
+
+### Process Rules
+- Start the review at design time, not post-implementation: bias is cheapest to fix before code exists.
+- Record quantified results per segment; subjective "looks fair" reviews are not acceptable.
+- Every P0/P1 finding gets an owner + ETA before the review closes.
+- Significant decisions become ADRs in `.sdlc/decisions/`.
+
+### Quality Standards
+- Bias tests run on ≥ 3 representative segments with quantified metrics.
+- Model card published in `docs/rai/` before any AI feature ships.
+- Privacy review records retention, consent, and lawful basis.
+- Accessibility review verifies WCAG 2.2 AA with 0 open Level A/AA failures.
+
+## Indicators of Done (Responsible AI)
+
+| Indicator | Target |
+| --- | --- |
+| Bias tests | run on ≥ 3 representative segments with quantified results |
+| Model card | published before release |
+| Privacy review | records retention + consent + lawful basis |
+| Accessibility | WCAG 2.2 AA verified; 0 open Level A/AA failures |
+| Human-in-the-loop | tier documented for every high-impact decision |
+| Remediation | every P0/P1 finding has owner + ETA |
+
 ## Outputs
 
 - Responsible AI review reports with prioritized findings

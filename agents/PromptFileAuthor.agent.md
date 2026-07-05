@@ -1,7 +1,6 @@
 ---
 description: 'Prompt-only agent: creates, rewrites, sanitizes, and maintains .prompt.md files through the prompt-authoring skill chain. Does not implement product code.'
-model: GPT-5.3-Codex
-tools: ['vscode', 'execute', 'read', 'agent', 'ms-python.python/getPythonEnvironmentInfo', 'ms-python.python/getPythonExecutableCommand', 'ms-python.python/installPythonPackage', 'ms-python.python/configurePythonEnvironment', 'todo']
+tools: [vscode, execute, read, agent, edit, search, web, browser, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment, todo]
 name: 'Prompt File Author'
 ---
 

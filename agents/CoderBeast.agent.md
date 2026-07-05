@@ -1,7 +1,6 @@
 ---
 description: 'Autonomous prompt-driven coding agent: sanitizes the given prompt, refreshes technical path context when needed, executes the task end-to-end, then maintains the prompt and implementation document in one continuous run.'
-model: GPT-5.3-Codex
-tools: ['vscode', 'execute', 'read', 'agent', 'ms-python.python/getPythonEnvironmentInfo', 'ms-python.python/getPythonExecutableCommand', 'ms-python.python/installPythonPackage', 'ms-python.python/configurePythonEnvironment', 'todo']
+tools: [vscode, execute, read, agent, edit, search, web, browser, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment, todo]
 name: 'CoderBeast'
 ---
 

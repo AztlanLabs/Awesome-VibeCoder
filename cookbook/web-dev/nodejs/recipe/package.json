@@ -1,0 +1,19 @@
+{
+  "name": "web-dev-nodejs-recipes",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Runnable Node.js examples for the Awesome-VibeCoder web-dev cookbook",
+  "scripts": {
+    "streaming-responses": "tsx streaming-responses.ts",
+    "graceful-shutdown": "tsx graceful-shutdown.ts",
+    "structured-logger": "tsx structured-logger.ts",
+    "worker-threads-pool": "tsx worker-threads-pool.ts",
+    "rate-limiter": "tsx rate-limiter.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.7",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

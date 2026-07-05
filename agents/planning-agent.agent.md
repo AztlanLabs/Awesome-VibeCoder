@@ -1,8 +1,7 @@
 ---
 description: 'Produces architecture advice, formal specifications, and deterministic implementation plans for humans or AI without executing product code.'
 name: 'Planning Agent'
-model: 'GPT-5.4'
-tools: ['vscode', 'execute', 'read', 'agent', 'ms-python.python/getPythonEnvironmentInfo', 'ms-python.python/getPythonExecutableCommand', 'ms-python.python/installPythonPackage', 'ms-python.python/configurePythonEnvironment', 'todo']
+tools: [vscode, execute, read, agent, edit, search, web, browser, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment, todo]
 ---
 
 # Planning Agent

@@ -13,8 +13,8 @@ On startup, every agent and skill performs these actions:
 1. Check for the presence of the `.sdlc/` directory at the project root.
 2. If the `.sdlc/` directory is missing, automatically initialize it by creating the standard file structure and templates.
 3. Load the project brief, active context, progress registry, and decision logs from `.sdlc/` to establish the execution baseline.
-4. Write all generated specifications, requirements, ADRs, designs, audits, and research reports directly to their designated locations within the `.sdlc/` folder.
-5. In addition to role-specific files, append a complete summary of every output or action to the centralized project chronicle in `.sdlc/memory.md` so that it is indexed and shared across all future executions.
+4. Write all generated specifications, requirements, ADRs, designs, audits, and research reports directly to their designated locations within the `.sdlc/` folder. Source code, tests, and infrastructure/pipeline files are never written here — they belong in the project's real source tree, and only their paths + verification results are recorded in `.sdlc/`.
+5. In addition to role-specific files, append a short pointer entry to the centralized project chronicle in `.sdlc/memory.md`: the real artifact paths changed and, for any executable work, the exact build/test/validation command run and its result. Memory is a **side effect** of verified work, not the deliverable itself — do not treat writing to `memory.md` as equivalent to completing the task.
 
 ## Initialization
 
@@ -155,6 +155,16 @@ For `activeContext.md`, `progress.md`, and `memory.md`:
 
 Never edit or delete prior entries. Always append at the end.
 
+For roles that write executable artifacts (code, tests, IaC, pipelines), `[Content]` must include the real file paths changed and the exact verification command + result, for example:
+
+```markdown
+### 2026-06-30T10:00:00Z — SDLC Developer
+Files: src/orders/order-service.ts, src/orders/order-service.test.ts
+Verification: `npm test -- order-service` — 12 passed, 0 failed
+```
+
+A prose description with no file paths and no command/result is not a valid entry for executable work.
+
 ### Single-Agent Execution Pattern
 
 When running in sequential execution (one agent active at a time), the active agent has read/write authority to update task statuses and progress in `.sdlc/` files relevant to its task, but must respect the standard append-only structure.
@@ -293,11 +303,48 @@ When updating a contract:
 2. Update the contract content.
 3. Create a handoff to notify consuming roles of the change.
 
+## Patterns, Rules & Standards
+
+### State File Conventions
+- **One purpose per file**: `projectbrief.md` (scope), `architecture.md` (structure), `systemPatterns.md` (conventions + budgets), `techContext.md` (stack), `activeContext.md` (current focus), `progress.md` (verified work), `memory.md` (chronicle) — never duplicate concerns across files.
+- **Structured entries**: append-only entries are timestamped and role-attributed (`### [ISO-8601] — [Agent Role]`); executable-work entries carry real file paths + a command/result, not prose.
+- **IDs are sequential and unique**: `TASK-NNN`, `HO-NNN`, `ADR-NNN` advance by one; collisions are resolved before writing.
+- **Closed shapes**: tasks carry status, assignee, acceptance criteria, dependencies, and a progress log; handoffs carry from/to, deliverables, dependencies-met, and notes; ADRs carry Context/Decision/Consequences/Alternatives.
+
+### Concurrency & Ownership Rules
+- **Primary writer per file**: respect the ownership table — `architecture.md`/`systemPatterns.md` only by architect roles, `contracts/*` only by the designated owner role, `decisions/*` only by architect roles.
+- **Single-agent write authority**: in sequential execution the active agent owns its task's status/progress writes; other roles propose changes via ADRs or handoffs, never direct edits.
+- **Cross-role edits require an ADR**: editing another role's primary file without a recorded ADR or task is forbidden.
+- **No destructive edits** to `activeContext.md`, `progress.md`, or `memory.md` — append only; corrections are appended, not back-patched.
+
+### Handoff Rules
+- **Two-party write pattern**: the producing agent creates the handoff `PENDING`; the consuming agent sets `ACKNOWLEDGED`, then `COMPLETED` after the work lands.
+- **Deliverables are file paths**: a handoff lists concrete artifact paths plus the verification command/result, not a narrative.
+- **Downstream notification on contract change**: every `contracts/*.md` edit emits a timestamped changelog entry and a handoff to each consuming role.
+
+### Integrity Rules
+- **_index consistency**: `tasks/_index.md`, `handoffs/_index.md`, and `decisions/_index.md` match the individual file statuses at all times.
+- **Verification before `COMPLETED`**: a task transitions to `COMPLETED` only when its acceptance criteria are met and, for executable work, a real command/result is cited.
+- **Memory is a side effect**: an entry in `memory.md` is evidence of verified work, not a substitute for running the build/test/scan.
+
+## Indicators of Done (Shared Memory)
+
+| Indicator | Target |
+| --- | --- |
+| Baseline loaded on startup | every agent reads `projectbrief.md`, `activeContext.md`, `progress.md` before acting |
+| Task lifecycle status | 100% of tasks have a current lifecycle status (`PENDING`/`IN_PROGRESS`/`COMPLETED`/`BLOCKED`/`ABANDONED`) |
+| Handoffs acknowledged | 100% of `PENDING` handoffs reach `ACKNOWLEDGED`, then `COMPLETED`; 0 stale `PENDING` handoffs |
+| Orphaned tasks | 0 `IN_PROGRESS` tasks with no assigned role |
+| Append-only integrity | 0 destructive edits to `activeContext.md`/`progress.md`/`memory.md` |
+| _index consistency | `_index.md` files match individual file statuses |
+
 ## Do Not Do
 
 - Do not operate in a stateless mode without initializing or writing to the `.sdlc/` project baseline.
 - Do not read all files on startup — read only what your role or task requires.
 - Do not edit another role's primary files without creating an ADR or task explaining the change.
+- Do not write source code, tests, or infrastructure/pipeline files into `.sdlc/` — those belong in the project's real source tree.
+- Do not treat a `memory.md` entry as a substitute for actually running a build, test, or validation command. If a role's Definition of Done requires verification, write to memory only after that verification has actually been run.
 - Do not delete any append-only file content.
 - Do not output documentation or design reports only in chat; they must be stored in `.sdlc/` files.
 

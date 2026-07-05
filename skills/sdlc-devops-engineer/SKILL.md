@@ -18,13 +18,14 @@ Use when the task involves:
 
 ## Centralized State Architecture
 
-On startup, verify the `.sdlc/` workspace state directory. Load the shared state baseline and record all progress and deliverables inside `.sdlc/` state files.
+On startup, verify the `.sdlc/` workspace state directory and load the shared state baseline. `.sdlc/` tracks tasks and progress — pipeline configs and IaC always go into their real locations in the project tree (e.g. `.github/workflows/`, `infra/`, `terraform/`).
 
 1. Read `architecture.md`, `techContext.md`, and `contracts/security-requirements.md` on startup.
-2. Write infrastructure documentation to `techContext.md` (infra sections).
-3. Claim DevOps tasks from `tasks/_index.md`.
-4. Create pipeline configs and deployment documentation.
-5. Append completion details and artifact paths to `.sdlc/memory.md`.
+2. Claim DevOps tasks from `tasks/_index.md`.
+3. Write real pipeline configs and IaC to their actual locations in the project tree.
+4. Validate what you wrote (`terraform validate`/`fmt`, pipeline lint, or a dry run); fix and re-run until it validates cleanly.
+5. Record infrastructure documentation in `techContext.md` (infra sections), referencing the real file paths and validation result.
+6. Append the artifact paths and validation result (not a prose summary) to `.sdlc/memory.md`.
 
 ## Core Capabilities
 
@@ -68,14 +69,52 @@ On startup, verify the `.sdlc/` workspace state directory. Load the shared state
 - **Feature Flags**: Deploy dark, enable incrementally.
 - Define rollback procedures and blast radius containment.
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **GitOps**: cluster/environment state declared in a repo; a controller reconciles the live system to the committed state (ArgoCD/Flux).
+- **IaC (Terraform/Pulumi/Bicep)**: every cloud resource is code under `infra/`/`terraform/`; no click-ops.
+- **Immutable Infrastructure**: replace, do not mutate; servers/containers are rebuilt from image, never patched in place.
+- **Blue-Green / Canary Releases**: zero-downtime deploys with instant switch or progressive traffic shift; auto-halt on error-budget breach.
+- **Progressive Delivery (Feature Flags)**: ship dark, enable incrementally; decouple deploy from release and bound blast radius.
+- **Shift-Left Security**: dependency scan, secret scan, SAST, and image scan run in the build stage, not after release.
+- **SLO / SLI / Error Budgets**: every service declares SLIs and an SLO; breaches consume the error budget and throttle releases.
+- **Observability Three Pillars**: structured logs, metrics, and traces correlated on the same trace/request ID.
+- **DORA Metrics**: deployment frequency, lead time, change-failure rate, and MTTR are tracked as delivery health.
+
+### Process Rules
+- Write pipelines/IaC to their real locations, then actually validate them (`terraform validate`/`fmt`, pipeline lint, or dry run) before reporting done.
+- Main is always green; a broken `main` is a P0 and merges are gated, not eyeballed.
+- Validate-before-plan: show the plan diff for review; never `apply` without a reviewed plan.
+- Record the exact validation command and result in `techContext.md`/`progress.md`; narrate, do not declare.
+
+### Quality Standards
+- `terraform validate`/`fmt` clean; pipeline YAML lint clean; `docker build` succeeds.
+- Zero secrets in the repo (secret-scan gate green); least-privilege IAM, no `*` roles.
+- Zero-downtime deploy strategy documented per service; rollback exercised before a release is called safe.
+- Health probes (liveness/readiness/startup) on every long-lived workload.
+- SLOs and burn-rate alerts defined per service and wired to on-call.
+
+## Indicators of Done (DevOps)
+
+| Indicator | Target |
+| --- | --- |
+| Pipeline on main | green; last run + command recorded |
+| IaC validates | `terraform validate`/`fmt` or equivalent passes |
+| Deploy strategy | zero-downtime, documented per service |
+| Rollback | exercised in dev/staging; result recorded |
+| SLOs & alerts | defined per service; burn-rate alert wired |
+| Secrets | in vault/CI secret store; scan clean (zero in repo) |
+| Changes run | actually executed via `runTasks`/`execute` |
+
 ## Outputs
 
-- CI/CD pipeline configurations
-- Infrastructure as code modules
+- CI/CD pipeline configurations, written to their real location and validated (lint/dry-run)
+- Infrastructure as code modules, written to their real location and validated (`terraform validate`/`fmt` or equivalent)
 - Dockerfiles and Kubernetes manifests
 - Monitoring and alerting configurations
 - Deployment runbooks
-- `techContext.md` updates (team mode)
+- `techContext.md` updates referencing real file paths and validation results (team mode)
 
 ## Boundaries
 

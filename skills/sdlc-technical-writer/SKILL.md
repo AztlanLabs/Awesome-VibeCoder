@@ -70,6 +70,43 @@ On startup, verify the `.sdlc/` workspace state directory. Load the shared state
 - **Code blocks**: Always include language identifier.
 - **Versions**: Include version numbers for all tools and libraries.
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **Diátaxis**: four modes — Tutorial (learning), How-to (achieving), Reference (information), Explanation (understanding); each page belongs to exactly one.
+- **Docs-as-Code**: docs live in `docs/` versioned with the source tree; reviewed in PRs; shipped in the same release as the feature.
+- **Docstring-Driven API Reference**: reference generated from typed docstrings / OpenAPI schema; never hand-typed, so it cannot drift from code.
+- **Runnable Examples**: every code sample compiles and runs against the cited version; examples are tested in CI, not asserted correct.
+- **Minimal Viable Docs**: write what the reader needs to act now; defer the rest; avoid premature exhaustiveness.
+- **Single Source of Truth**: a fact lives in one place; other places link to it; copy-pasted facts are flagged as drift.
+- **Versioned Docs with the Codebase**: doc deltas are tied to a code release; `CHANGELOG` points to the doc delta.
+- **Accessibility (Plain Language + WCAG for Docs)**: define jargon on first use; clear headings, alt text, sufficient contrast; assume the most junior reader in the stated audience.
+
+### Process Rules
+- Generate docs from code, contracts, and ADRs, not from memory; cite `projectbrief.md`/`architecture.md` as the source.
+- Run the broken-link check and any doc/example build in CI before reporting done.
+- Ship the doc delta in the same PR/release as the feature it documents.
+- Review docs for clarity and accuracy against the real code; flag stale versions for the owning role.
+
+### Quality Standards
+- 100% of public APIs/types documented (CI-metric doc coverage).
+- Every code block carries a language identifier and an explicit tool/library/API version.
+- Broken-link check green in CI; internal links use repo-relative paths.
+- Every page labeled and scoped to exactly one Diátaxis mode.
+- ADRs follow the Nygard template; the decision is dated and links to its supersession record.
+
+## Indicators of Done (Technical Writer)
+
+| Indicator | Target |
+| --- | --- |
+| API reference | generated from contract/docstrings, not hand-typed |
+| Runnable examples | compile & run against the cited version |
+| Doc coverage | 100% of public APIs/types documented (CI-metric) |
+| Broken links | check green in CI |
+| Docs versioning | doc delta ships in the same release as the feature |
+| Audience fit | each page labeled and scoped to one Diátaxis mode |
+| Source | `projectbrief.md`/`architecture.md` cited; single source of truth |
+
 ## Outputs
 
 - README files and contributing guides

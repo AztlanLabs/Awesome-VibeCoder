@@ -1,0 +1,25 @@
+{
+  "name": "web-dev-nextjs-recipes",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Runnable examples for the Web Development Cookbook — Next.js recipes",
+  "scripts": {
+    "server-actions-validation": "tsx server-actions-validation.tsx",
+    "middleware-auth": "tsx middleware-auth.ts",
+    "streaming-ssr": "tsx streaming-ssr.tsx",
+    "route-handlers-streaming": "tsx route-handlers-streaming.ts",
+    "isr-on-demand": "tsx isr-on-demand.ts"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/node": "^22.19.7",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "web-dev-astro-recipes",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Runnable examples for the Web Development Cookbook — Astro recipes",
+  "scripts": {},
+  "devDependencies": {
+    "astro": "^5.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

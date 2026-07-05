@@ -28,9 +28,9 @@
 
 **Awesome-VibeCoder** is a curated, open-source directory of customization assets for AI coding tools (such as GitHub Copilot and Cursor). It enables developers to implement structured, role-based workflows for software engineering. Rather than relying on simple, single-prompt instructions, Awesome-VibeCoder provides:
 
-*   **32+ Specialized Agents** (`.agent.md`): Structured personas for roles ranging from Database Architects to DevOps Engineers.
+*   **35+ Specialized Agents** (`.agent.md`): Structured personas for roles ranging from Database Architects to DevOps Engineers, plus dedicated web design-system and performance engineers.
 *   **87+ Modular System Instructions** (`.instructions.md`): Deep domain-specific rules (languages, frameworks, secure coding patterns).
-*   **38+ Task-Focused Skills** (`SKILL.md`): Reusable execution guides for planning, refactoring, context-mapping, and interface evaluation.
+*   **42+ Task-Focused Skills** (`SKILL.md`): Reusable execution guides for planning, refactoring, context-mapping, interface evaluation, design systems, accessibility audits, and performance budgets.
 *   **Structured Workflows** (`.workflow.md`): Execution blueprints to orchestrate parallel or sequential multi-agent activities.
 
 ---
@@ -41,12 +41,12 @@ Below is a breakdown of the repository's core directories and their correspondin
 
 | Directory | Description | Documentation |
 | :--- | :--- | :--- |
-| [`/agents`](agents/) | 32+ custom agent profiles defining role identities, system instructions, and task domains. | [Agents Catalog](docs/README.agents.md) |
+| [`/agents`](agents/) | 35+ custom agent profiles defining role identities, system instructions, and task domains. | [Agents Catalog](docs/README.agents.md) |
 | [`/instructions`](instructions/) | 87+ markdown guides detailing styling, language features, security (OWASP), and CI/CD. | [Instructions Library](docs/README.instructions.md) |
-| [`/skills`](skills/) | 38+ self-contained skill packages containing runbooks and markdown templates. | [Skills Catalog](docs/README.skills.md) |
+| [`/skills`](skills/) | 42+ self-contained skill packages containing runbooks and markdown templates. | [Skills Catalog](docs/README.skills.md) |
 | [`/workflows`](workflows/) | Sequence maps and concurrency stages to run agent chains in parallel or series. | [Workflows Catalog](docs/README.workflows.md) |
 | [`/docs`](docs/) | Complete documentation, guides, and integration materials (e.g. MCP guidelines). | [Documentation Portal](docs/README.sdlc-system.md) |
-| [`/cookbook`](cookbook/) | Runnable examples, developer recipes, and integrations with the GitHub Copilot SDK. | [Cookbook Index](cookbook/README.md) |
+| [`/cookbook`](cookbook/) | Runnable recipes for the Copilot SDK and the modern web stack (Node.js, React, Next.js, Astro, Svelte, Vue). | [Cookbook Index](cookbook/README.md) |
 | [`/.github`](.github/) | Mirrors of active assets, prompt layouts, and customization configurations. | - |
 
 ---

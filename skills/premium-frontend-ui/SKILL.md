@@ -100,6 +100,67 @@ When the user asks you to implement these patterns, leverage industry-standard l
 
 ---
 
+## 7. Indicators of Premium Craftsmanship
+
+Use these signals as acceptance criteria — a component is not "premium" until the relevant indicators hold.
+
+### Visual & Structural Indicators
+
+| Indicator | Target / Signal |
+| --- | --- |
+| Type contrast ratio (headline size / body size) | ≥ 4× scale difference |
+| Layout whitespace rhythm | Consistent 8-pt baseline grid, no orphaned gaps |
+| Cinematic viewport coverage | Hero ≥ `90vh` / `90dvh` with content above the fold |
+| Motion presence | ≥ 1 staggered entrance + 1 contextual micro-interaction |
+| Color depth | Foreground/background ΔE perceptible; AA contrast everywhere |
+| Edge quality | No raw 0-radius rectangles unless brutalism is the chosen identity |
+
+### Performance Indicators
+
+| Indicator | Target |
+| --- | --- |
+| Animations triggering layout | 0 (only `transform`/`opacity`) |
+| Main-thread long tasks on load | < 50ms p95 |
+| `prefers-reduced-motion` branch | Implemented and reviewed |
+| Touch-device degradation | No hover-only affordances; `hover: hover` gated |
+| Image weight (hero, LCP) | AVIF/WebP, sized to viewport, ≤ 200KB on mobile |
+
+### Accessibility Indicators (do not regress for aesthetics)
+
+| Indicator | Target |
+| --- | --- |
+| WCAG 2.2 AA contrast | Minimum 4.5:1 body, 3:1 large text |
+| Focus visibility | Visible focus ring on every interactive element |
+| Keyboard reachability | All reveal-on-scroll content reachable via Tab |
+| Motion auto-disable | `prefers-reduced-motion: reduce` disables parallax + magnetic cursors |
+
+## 8. Guidelines & Rules
+
+1. **Composition over configuration**: build from small primitives (frame, layer, reveal, magnetic) rather than one mega-component with dozens of props.
+2. **Identity first**: commit to one creative direction (editorial brutalism, organic fluidity, cyber, cinematic) — mixing dilutes premium feel.
+3. **No layout-thrash animations**: the moment you reach for `width`/`height`/`top`/`margin` transitions, stop and use `transform`.
+4. **Progressive enhancement**: the page must read and navigate without JS; reveal animations and cursor effects layer on top.
+5. **Tokenized aesthetics**: colors, spacing, radii, durations, and easings must live in CSS custom properties — never as raw literals in components.
+6. **Reduced-motion parity**: the no-motion experience must still communicate the same content hierarchy.
+7. **Performance budget before polish**: a frame that drops below 55fps is a regression regardless of beauty.
+8. **Lighthouse-cI gate**: treat LCP > 2.5s, INP > 200ms, or CLS > 0.1 as a blocking defect.
+
+## 9. Project Structure (recommended)
+
+```
+src/
+├── styles/
+│   ├── tokens.css          # color, space, type, motion tokens
+│   ├── motion.css          # keyframes, easings, reveal utilities
+│   └── base.css            # reset, fluid typography, print
+├── components/
+│   ├── primitives/         # Frame, Reveal, Magnetic, Parallax
+│   ├── layout/             # Hero, Section, Marquee
+│   └── ui/                 # buttons, nav, cards
+└── motion/
+    └── variants.ts         # shared Framer Motion variants
+```
+
 ## Summary of Action
 
 Whenever you receive a prompt to "Build a premium landing page," "Create an Awwwards-style component," or "Design an immersive UI," you must automatically:
@@ -108,3 +169,4 @@ Whenever you receive a prompt to "Build a premium landing page," "Create an Awww
 3. Integrate sweeping, staggered component entrances.
 4. Elevate the typography using fluid scales.
 5. Create an intentional, memorable aesthetic footprint.
+6. Record the relevant indicators from §7 in your handoff so progress is measurable.

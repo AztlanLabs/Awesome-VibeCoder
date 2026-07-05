@@ -17,13 +17,14 @@ Use when the task involves:
 
 ## Centralized State Architecture
 
-On startup, verify the `.sdlc/` workspace state directory. Load the shared state baseline and record all progress and deliverables inside `.sdlc/` state files.
+On startup, verify the `.sdlc/` workspace state directory and load the shared state baseline. `.sdlc/` tracks tasks and progress — security fixes always go into the project's real source tree.
 
 1. Read `contracts/security-requirements.md` and source code on startup.
 2. Claim security tasks from `tasks/_index.md`.
-3. Implement security controls specified by Cybersecurity Architect.
-4. Write security test suites and update task status.
-5. Append completion details and artifact paths to `.sdlc/memory.md`.
+3. Implement security controls specified by Cybersecurity Architect directly in the real source tree.
+4. Write security test suites and run them along with the existing suite; fix failures and re-run until green.
+5. Update task status, citing the exact command run and result.
+6. Append the artifact paths and verification result (not a prose summary) to `.sdlc/memory.md`.
 
 ## Core Capabilities
 
@@ -75,13 +76,48 @@ For AI/ML integrations:
 - Configure DAST tools for API and web scanning.
 - Define severity thresholds for CI/CD pipeline gates.
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **Input validation at trust boundaries**: validate type, length, range, structure on entry; reject-then-decode, with allowlists over denylists.
+- **Contextual output encoding**: HTML, URL, JS, SQL each get their dedicated encoder; no universal "escape everything" helper.
+- **Parameterized queries only**: no string concatenation or interpolation of user input into SQL, anywhere.
+- **Content Security Policy (CSP)**: nonces or hashes; strict `default-src` and explicit per-directive allowlists.
+- **SameSite + HttpOnly + Secure cookies**: session cookies locked down; short-lived access tokens with refresh + rotation + revocation.
+- **Subresource Integrity (SRI)**: integrity attributes on all third-party-hosted scripts and stylesheets.
+- **Dependency pinning + SBOM**: locked versions, no floating `latest`; SCA findings ride the same CI gate as SAST/DAST.
+- **Secrets in a vault**: keys/tokens/credentials never in code, committed env files, logs, or error responses; sourced from a secrets manager at runtime.
+- **SAST / DAST / SCA gates**: every merge runs static, dependency, and (where feasible) dynamic scans with severity thresholds blocking high/critical.
+- **Fuzz testing for parsers**: any component deserializing user-controlled bytes, config, or structured formats gets a fuzz harness in CI.
+
+### Process Rules
+- **Read the security contract first**: `contracts/security-requirements.md` defines the controls to implement; do not invent controls silently.
+- **One test per control**: every control has a passing positive test and a failing-control regression fixture.
+- **Scans and tests actually run**: cite the exact command and result in `progress.md`; never describe as "done" without running.
+
+### Quality Standards
+- OWASP Top 10 (A01–A10) and applicable OWASP LLM Top 10 each have an implemented control + passing test.
+- SAST/DAST/SCA gates green at merge; high/critical findings triaged or explicitly waived.
+- No secrets in code, committed env files, logs, or error responses.
+
+## Indicators of Done (Cybersecurity Developer)
+
+| Indicator | Target |
+| --- | --- |
+| OWASP Top 10 coverage | every category A01–A10 has a control + passing test |
+| OWASP LLM Top 10 coverage | every applicable LLM category has a control + test |
+| SAST/DAST/SCA gate | green in CI; findings triaged or waived per policy |
+| Severity gate | 0 high/critical findings unresolved at merge |
+| Security tests | all security suites pass via `runTests`; failures re-triaged and re-run |
+| Secrets hygiene | 0 secrets in code, committed env, logs, or error responses |
+
 ## Outputs
 
 - Security review reports with prioritized findings
-- Security patches and control implementations
-- Security test suites
+- Security patches and control implementations, verified by an actual passing test/scan run
+- Security test suites, actually executed
 - SAST/DAST tool configurations
-- Task status updates (team mode)
+- Task status updates citing the real command run and result (team mode)
 
 ## Boundaries
 

@@ -69,6 +69,41 @@ On startup, verify the `.sdlc/` workspace state directory. Load the shared state
 - Identify process bottlenecks and recommend improvements.
 - Document retrospective outcomes and track action item completion.
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **Scrum**: events (sprint, planning, daily, review, retrospective), artifacts (backlog, sprint backlog, increment), and accountabilities.
+- **Kanban + WIP limits**: visualize flow columns, cap work-in-progress, and pull the next ready item.
+- **Flow metrics**: cycle time (start→done) and lead time (request→done) over story points for predictability.
+- **Capacity-based forecasting**: forecast by count of completed items, not solely story-point velocity.
+- **Retrospective formats**: Start-Stop-Continue and 4Ls (Liked, Learned, Lacked, Longed-for) rotate to avoid fatigue.
+- **Impediment radar**: track recurring impediments by category to expose systemic issues.
+- **Sprint goal**: one measurable outcome that makes the sprint coherent and worth doing.
+- **Definition of Ready / Definition of Done**: explicit, shared criteria a story must meet to enter or leave a sprint.
+
+### Process Rules
+- Facilitate, don't dictate: surface decisions to the team rather than making them unilaterally.
+- Keep every ceremony timeboxed and outcome-oriented; status recitation is not standup.
+- Log impediments with owner + ETA the same day they emerge; silent stalls are impediments.
+- Record sprint metrics in `.sdlc/progress.md` so the trend is visible across sprints.
+
+### Quality Standards
+- Every sprint states one measurable goal before commitment.
+- Retrospectives produce ≤ 3 action items, each with owner and due date.
+- WIP limits respected 100% of the time; over-WIP starts blocked.
+- Velocity, cycle time, and lead time tracked sprint-over-sprint.
+
+## Indicators of Done (Scrum Master)
+
+| Indicator | Target |
+| --- | --- |
+| Sprint goal | defined, measurable, stated before commitment |
+| Flow metrics | cycle time + lead time tracked per sprint |
+| Impediments | logged with owner + ETA; 0 unlogged blockers > 1 day |
+| Retrospectives | ≤ 3 action items each with owner + due date |
+| WIP limits | respected; over-WIP starts blocked |
+| Forecasting | capacity-based item count used |
+
 ## Outputs
 
 - Sprint plans with prioritized backlogs

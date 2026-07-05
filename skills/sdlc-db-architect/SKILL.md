@@ -73,6 +73,40 @@ erDiagram
 - Specify data transformation and backfill strategies.
 - Estimate migration duration and resource requirements.
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **3NF then deliberate denormalization**: normalize first; every denormalization is ADR-recorded with the access path it serves and the write-amplification cost.
+- **Entity-Relationship Diagrams (ERD)**: conceptual → logical → physical models in mermaid, with explicit cardinality and participation on every relationship.
+- **Indexing strategy per access path**: composite indexes ordered equality → range → sort; covering and partial indexes for hot reads; index added/dropped via migrations only.
+- **Sharding & partitioning**: shard on immutable high-cardinality keys; partition on the leading filter so the planner prunes; shard/partition decisions ADR-backed.
+- **Polyglot persistence**: relational by default; adopt NoSQL/search/stream stores only with an ADR citing the query shape or scale property a relational store can't meet.
+- **CQRS**: split read models from write models where read amplification is severe; projection updates via events, not synchronous joins.
+- **Slowly-changing dimensions (SCD)**: type distinguished per attribute (Type 1 overwrite, Type 2 history, Type 3 additive) and recorded in the schema contract.
+- **Expand-contract migrations**: add → backfill → dual-write → migrate reads → drop, so schema changes are zero-downtime and reversible.
+
+### Process Rules
+- **Read architecture + brief first**: `architecture.md` and `projectbrief.md` drive all data-modeling scope.
+- **Contract ownership**: `.sdlc/contracts/db-schema.md` is owned by this role; implementers propose changes via handoffs, never silent edits.
+- **ADRs for irreversible choices**: technology selection, sharding keys, and denormalizations all get an ADR before downstream work begins.
+
+### Quality Standards
+- Every entity + relationship is represented in the ERD and the schema contract.
+- 3NF baseline; every denormalization is deliberate, documented, and cost-justified.
+- Every documented access path maps to ≥ 1 supporting index.
+- Every migration has a rollback plan; zero-downtime for production-grade changes.
+
+## Indicators of Done (DB Architect)
+
+| Indicator | Target |
+| --- | --- |
+| ERD completeness | every entity + relationship mapped |
+| Normalization | 3NF with deliberate, ADR-documented denormalization |
+| Index coverage | ≥ 1 index per documented access path |
+| Migration strategy | expand-contract plan with rollback for every change |
+| Sharding/partitioning | shard/partition keys named where scale warrants, ADR-backed |
+| Contract committed | `.sdlc/contracts/db-schema.md` reflects current design |
+
 ## Outputs
 
 - ERD diagrams (mermaid) with entity definitions

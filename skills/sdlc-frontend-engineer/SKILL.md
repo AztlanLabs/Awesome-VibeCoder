@@ -18,14 +18,15 @@ Use when the task involves:
 
 ## Centralized State Architecture
 
-On startup, verify the `.sdlc/` workspace state directory. Load the shared state baseline and record all progress and deliverables inside `.sdlc/` state files.
+On startup, verify the `.sdlc/` workspace state directory and load the shared state baseline. `.sdlc/` tracks tasks and progress — UI code always goes into the project's real source tree.
 
 1. Read `contracts/api-contracts.md` and `systemPatterns.md` on startup.
 2. Check `handoffs/_index.md` for design specifications from UX/UI Designer.
 3. Consume API contracts from Backend Engineer without modifying them.
-4. Claim frontend tasks from `tasks/_index.md` and update status on completion.
-5. Create handoffs to QA Tester when UI features are ready for testing.
-6. Append completion details and artifact paths to `.sdlc/memory.md`.
+4. Claim frontend tasks from `tasks/_index.md`, implement them in the real source tree, then build and run tests; fix failures and re-run until green.
+5. Update task status on completion, citing the build/test command and result.
+6. Create handoffs to QA Tester when UI features are ready for testing.
+7. Append the artifact paths and verification result (not a prose summary) to `.sdlc/memory.md`.
 
 ## Core Capabilities
 
@@ -68,12 +69,44 @@ On startup, verify the `.sdlc/` workspace state directory. Load the shared state
 - Test at standard breakpoints: 320px, 768px, 1024px, 1440px.
 - Handle touch and pointer interactions appropriately.
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **Server-first RSC**: data-heavy components are Server Components; mark `'use client'` only at the leaves that need interactivity.
+- **Composition over configuration**: small primitives + slots, not one mega-component with dozens of props; variants via `data-*` attributes or typed union props, never boolean flag soup.
+- **Refs as props (React 19)**: pass `ref` directly as a prop — no `forwardRef`.
+- **State colocation**: server state in TanStack Query / route loaders; ephemeral UI state in `useState`/`useOptimistic`; lift state only when proven necessary, and split context to prevent re-render storms.
+- **Code splitting**: split routes and below-the-fold islands; preload the LCP asset.
+- **Design tokens as the seam**: consume tokens from the design system; never hardcode hex/literals that should be tokens.
+
+### Process Rules
+- **Consume contracts unchanged**: read `.sdlc/contracts/api-contracts.md` and use it as-is; contract drift is escalated to the Backend Engineer, not patched in the UI.
+- **Design handoff first**: read `handoffs/_index.md` for UX specifications before implementing a component.
+- **Build + test before done**: exact `runTasks`/`runTests` command and result cited in `progress.md`; failures triaged and re-run before `COMPLETED`.
+
+### Quality Standards
+- **Core Web Vitals budgets**: LCP ≤ 2.5s, INP < 200ms, CLS ≤ 0.1 on tested routes — declared in `systemPatterns.md`.
+- **Bundle budget**: ≤ 170KB JS (gzip) per route on mobile where realistic; surface the budget in `systemPatterns.md`.
+- **WCAG 2.2 AA**: 4.5:1 body contrast, 3:1 large text/UI components; keyboard reachable; focus-visible; ≥ 44×44 CSS px touch targets on mobile handoffs.
+- **Animate only `transform` and `opacity`**: never `width`/`height`/`top`/`margin`.
+
+## Indicators of Done (Frontend Engineer)
+
+| Indicator | Target |
+| --- | --- |
+| Build | passes via `runTasks`/`execute`; command + result cited in `progress.md` |
+| Unit/integration tests | pass via `runTests`; failures triaged and re-run |
+| Lighthouse a11y/LCP/CLS | AA target, LCP ≤ 2.5s, CLS ≤ 0.1 on tested routes |
+| Bundle (gzip per route) | within budget declared in `systemPatterns.md` |
+| Cross-viewport smoke | 375px / 768px / 1280px render without overflow |
+| API contract alignment | consumes `.sdlc/contracts/api-contracts.md` unchanged |
+
 ## Outputs
 
-- Production-ready UI components with accessibility compliance
+- Production-ready UI components with accessibility compliance, built and tested in the real source tree
 - Component documentation with usage examples
 - Performance optimization reports
-- Task status updates (team mode)
+- Task status updates citing the real build/test command and result (team mode)
 
 ## Boundaries
 

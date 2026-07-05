@@ -6,7 +6,7 @@ A modular, standalone-first AI system for the Software Development Lifecycle. Ev
 
 ### Run Individually (Single-Agent Run)
 
-You can run any `sdlc-*.agent.md` file individually. On startup, the agent will automatically initialize the `.sdlc/` shared state directory if it is missing, load the project baseline, perform its task, and write all logs and deliverables directly back to `.sdlc/`.
+You can run any `sdlc-*.agent.md` file individually. On startup, the agent will automatically initialize the `.sdlc/` shared state directory if it is missing, load the project baseline, and perform its task. Docs, ADRs, and contracts are written to `.sdlc/`; source code, tests, and infrastructure files are written to the project's real source tree and verified (build/tests run) before the agent records a pointer entry back to `.sdlc/progress.md`/`memory.md`.
 
 ### Run Collaboratively (Multi-Agent Workflows)
 
@@ -28,8 +28,8 @@ Every SDLC agent and skill operates within a unified, file-based shared state pl
 
 | Startup Directory State | Behavioral Execution | Primary Output Destination |
 |---|---|---|
-| Missing `.sdlc/` folder | Automatically initialized with standard templates | `.sdlc/` files & chronicle appends to `.sdlc/memory.md` |
-| Existing `.sdlc/` folder | Baseline loaded automatically for context awareness | `.sdlc/` files & chronicle appends to `.sdlc/memory.md` |
+| Missing `.sdlc/` folder | Automatically initialized with standard templates | Docs/ADRs/contracts to `.sdlc/`; code, tests, and infra to the project's real source tree; a pointer + verification result appended to `.sdlc/memory.md` |
+| Existing `.sdlc/` folder | Baseline loaded automatically for context awareness | Docs/ADRs/contracts to `.sdlc/`; code, tests, and infra to the project's real source tree; a pointer + verification result appended to `.sdlc/memory.md` |
 
 ### Shared Knowledge Layer (`.sdlc/`)
 
@@ -73,6 +73,16 @@ When team mode is active, agents collaborate through a file-based shared state:
 | Responsible AI | [sdlc-responsible-ai](../agents/sdlc-responsible-ai.agent.md) | [SKILL](../skills/sdlc-responsible-ai/SKILL.md) | Bias, accessibility, ethics |
 | Scrum Master | [sdlc-scrum-master](../agents/sdlc-scrum-master.agent.md) | [SKILL](../skills/sdlc-scrum-master/SKILL.md) | Sprint planning, agile coaching |
 
+### Optional Web Specialists
+
+Optional SDLC-family specialists for product teams that need dedicated design-system and performance ownership. They run standalone or alongside the 16 core roles.
+
+| Role | Agent | Skill | Domain |
+|---|---|---|---|
+| Web Design System Engineer | [web-design-system-engineer](../agents/web-design-system-engineer.agent.md) | [SKILL](../skills/web-design-system/SKILL.md) | Design tokens, theming, primitive APIs, a11y primitives |
+| Web Performance Engineer | [web-performance-engineer](../agents/web-performance-engineer.agent.md) | [SKILL](../skills/web-performance-budget/SKILL.md) | Core Web Vitals budgets, CI gates, regression triage |
+| Accessibility Auditor | _(uses UX/UI Designer)_ | [SKILL](../skills/web-accessibility-audit/SKILL.md) | WCAG 2.2 AA/AAA audit workflow, automated + manual |
+
 ### Supporting Components
 
 | Component | Path | Purpose |
@@ -82,6 +92,15 @@ When team mode is active, agents collaborate through a file-based shared state:
 | Orchestrator | [Agent](../agents/sdlc-orchestrator.agent.md) | Optional multi-agent coordinator |
 | Sequential Workflow | [Workflow](../workflows/sdlc-sequential.workflow.md) | One-at-a-time execution order |
 | Parallel Workflow | [Workflow](../workflows/sdlc-parallel.workflow.md) | Concurrent execution phases |
+
+### Professional Standards (consistent across all SDLC roles)
+
+Every SDLC role agent and matching skill carries two uniform sections so quality is measurable rather than asserted:
+
+- **`## Patterns, Rules & Structures`** (agents) / **`## Patterns, Rules & Standards`** (skills) — the named industry patterns, professional rules, process steps, and a deliverable/file-structure convention the role applies. This is the "how/which" — the named patterns — not a restatement of capabilities.
+- **`## Indicators of Done (<role>)`** — a measurable target table (build green, tests cited from a real run, contract written before claiming done, latency/coverage/flakiness budgets, etc.) used as acceptance criteria before the role writes to `memory.md` or hands off.
+
+Implementation roles (Developer, Backend, Frontend, Full Stack, DB Developer, Cybersecurity Developer, QA, DevOps) additionally retain the existing narrative **Definition of Done** block that requires a real build/test run with the command and result cited in `progress.md` — gate evidence, not status.
 
 ## Workflows
 
@@ -110,7 +129,7 @@ See [sdlc-shared-memory SKILL](../skills/sdlc-shared-memory/SKILL.md) for the fu
 ## FAQ
 
 **Can I use just one agent?**
-Yes. Every agent is fully functional when run individually. It will automatically initialize the `.sdlc/` workspace baseline at your project root and record its execution details and logs there.
+Yes. Every agent is fully functional when run individually. It will automatically initialize the `.sdlc/` workspace baseline at your project root, write real deliverables (code/tests/docs/infra) to their proper locations, and record a pointer + verification result there — implementer roles (Developer, Frontend/Backend/Full Stack Engineer, DB Developer, Cybersecurity Developer, QA Tester, DevOps Engineer) must satisfy their agent file's "Definition of Done" (real build/test/validation run) before marking work complete.
 
 **Do I need to use all 16 roles?**
 No. Use only the roles relevant to your project. A simple API project might use only Backend Engineer + QA Tester.

@@ -78,6 +78,40 @@ Define WCAG 2.1 AA requirements for every design:
 - Alternative text for all images and media.
 - Form labeling and error announcement requirements.
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **Jobs-to-be-Done (JTBD)**: frame every flow around the job users hire the product to do, with situational + motivational + expected-outcome clauses.
+- **User journey maps**: per-persona emotional + behavioral + friction timeline, decomposed into named states with one primary action each.
+- **Design tokens (tiered)**: primitive → semantic → component tiers; raw hex/literals are flagged as drift.
+- **WCAG 2.2 AA**: 4.5:1 body text, 3:1 large text and UI components; declare ratios per spec.
+- **8-pt baseline grid** (4-pt micro < 16px); 44×44 CSS px touch targets on mobile.
+- **Atomic design**: atoms → molecules → organisms → templates; one responsibility per component.
+- **Nielsen's 10 usability heuristics**: each flow annotated against the heuristics it depends on and any it knowingly violates.
+
+### Process Rules
+- **Read before designing**: load `projectbrief.md`, requirements, and any existing `docs/ux/` artifacts before producing new ones.
+- **One identity per surface**: name the creative direction (editorial / organic / cyber / cinematic) up front so design stays coherent downstream.
+- **Hand off handoff-ready specs**: flow + a11y SCs + tokens per feature, not just rough sketches.
+- **Token drift check** before completion: grep the deliverables for raw hex and magic numbers.
+
+### Quality Standards
+- Every text/background pair declares a contrast ratio ≥ AA (4.5:1 body, 3:1 large/UI).
+- All mobile interactive elements ≥ 44×44 CSS px.
+- Each flow lists the WCAG 2.2 SCs it depends on.
+- Zero raw hex/literals in handoff docs; every value is a token reference.
+
+## Indicators of Done (UX/UI Designer)
+
+| Indicator | Target |
+| --- | --- |
+| JTBD coverage | each job maps to ≥ 1 flow with measurable success criteria |
+| Contrast in specs | every text/background pair declares an AA-compliant ratio |
+| Touch-target audit | all mobile interactive elements ≥ 44×44 |
+| A11y SC mapping | each flow lists its WCAG 2.2 SCs |
+| Token drift | 0 raw hex/literals in handoff docs |
+| Handoff completeness | flow + a11y requirements + tokens per feature |
+
 ## Outputs
 
 - JTBD analysis documents

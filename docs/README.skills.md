@@ -1,6 +1,6 @@
 # Skills
 
-This repository currently includes 38 root skills in [skills/](../skills/). Each skill is a task-focused folder anchored by a `SKILL.md` file and, when needed, bundled templates, examples, or workflow notes.
+This repository currently includes 42 root skills in [skills/](../skills/). Each skill is a task-focused folder anchored by a `SKILL.md` file and, when needed, bundled templates, examples, or workflow notes.
 
 ## Modular SDLC Skills (New)
 
@@ -39,6 +39,7 @@ These skills remain active for general prompt engineering, planning, refactoring
 | [ai-prompt-engineering-safety-review](../skills/ai-prompt-engineering-safety-review/SKILL.md) | Review prompts for safety, bias, security, and effectiveness |
 | [architecture-option-evaluator](../skills/architecture-option-evaluator/SKILL.md) | Evaluate architecture options, trade-offs, and consolidation decisions |
 | [context-map](../skills/context-map/SKILL.md) | Build a map of relevant files before making changes |
+| [context-researcher](../skills/context-researcher/SKILL.md) | Investigate code, bugs, or issues and produce an evidence-backed research file with root causes and exact files/lines |
 | [formal-specification-writer](../skills/formal-specification-writer/SKILL.md) | Write structured, machine-readable specifications and requirements |
 | [implementation-plan-generator](../skills/implementation-plan-generator/SKILL.md) | Generate deterministic human and AI-executable implementation plans |
 | [planning-quality-gate](../skills/planning-quality-gate/SKILL.md) | Validate planning artifacts for ambiguity, overlap, and missing verification |
@@ -55,6 +56,9 @@ These skills remain active for general prompt engineering, planning, refactoring
 | [technical-path-indexer](../skills/technical-path-indexer/SKILL.md) | Scan repository paths, routes, references, and companion-file links to emit weighted technical path indexes |
 | [web-coder](../skills/web-coder/SKILL.md) | Apply deep web platform knowledge across frontend and backend work |
 | [web-design-reviewer](../skills/web-design-reviewer/SKILL.md) | Inspect and fix design and layout issues visually |
+| [web-design-system](../skills/web-design-system/SKILL.md) | Design tokens (color/space/type/radius/shadow/motion), tiered model, theming, primitive APIs, Figma sync, versioning |
+| [web-accessibility-audit](../skills/web-accessibility-audit/SKILL.md) | WCAG 2.2 AA/AAA audits with automated + manual passes and a remediation report |
+| [web-performance-budget](../skills/web-performance-budget/SKILL.md) | Core Web Vitals (LCP/INP/CLS/TTFB/TBT) and asset budgets enforced across the build pipeline |
 | [what-context-needed](../skills/what-context-needed/SKILL.md) | Ask what files are needed before answering a codebase question |
 
 ---

@@ -1,0 +1,13 @@
+{
+  "name": "web-dev-svelte-recipes",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Runnable examples for the Web Development Cookbook — Svelte recipes",
+  "scripts": {},
+  "devDependencies": {
+    "svelte": "^5.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

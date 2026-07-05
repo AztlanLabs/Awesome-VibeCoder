@@ -18,13 +18,14 @@ Use when the task involves:
 
 ## Centralized State Architecture
 
-On startup, verify the `.sdlc/` workspace state directory. Load the shared state baseline and record all progress and deliverables inside `.sdlc/` state files.
+On startup, verify the `.sdlc/` workspace state directory and load the shared state baseline. `.sdlc/` tracks tasks and progress — automated tests always go into the project's real test tree.
 
 1. Read all `contracts/*.md` and `projectbrief.md` on startup.
 2. Write test strategy to `contracts/test-strategy.md`.
 3. Claim QA tasks from `tasks/_index.md`.
-4. Generate quality reports and update task status.
-5. Append completion details and artifact paths to `.sdlc/memory.md`.
+4. Write automated tests in the project's real test tree, then actually run the suite. Triage failures and re-run until the result is known.
+5. Generate quality reports from the real last-run results and update task status.
+6. Append the artifact paths and real test results (not a prose summary) to `.sdlc/memory.md`.
 
 ## Core Capabilities
 
@@ -89,14 +90,54 @@ Define quality criteria for each delivery milestone:
   - Bug density by module
   - Test execution time trends
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **Test Pyramid**: many fast unit tests at the base, focused integration in the middle, scarce E2E at the tip; ratio declared per project type.
+- **AAA (Arrange-Act-Assert)**: every test visibly separates the three phases; one logical assertion per test.
+- **Equivalence Partitioning + Boundary Value Analysis**: partition inputs into classes; test the boundary values and just-outside values for every documented limit.
+- **Contract Testing (Pact)**: consumer-and-provider contracts pin cross-service interfaces; consumer-side assertions stay driven by the provider's contract, not mocks invented locally.
+- **Mutation Testing**: a mutation tool (Stryker/mutmut) verifies the suite catches real faults; low mutation score ⇒ tests are theatre.
+- **Property-Based Testing**: for parsers/algorithms, state invariants (Quickcheck/hypothesis/fast-check) over hand-picked examples.
+- **Fail-Fast**: tests abort on the first statement that violates expectations; no swallowed errors; failures emit the real command output.
+- **Tagging for Suites**: `@unit`/`@integration`/`@e2e`/`@smoke`/`@regression` tags drive selective runs in CI and locally.
+- **Golden Master (Approval Testing)**: characterize legacy behavior with captured outputs; any approved change is a deliberate review, not a silent regression.
+
+### Process Rules
+- Write tests in the real test tree, then actually run the suite via `runTests`; "tests written" is never "tests passing."
+- Triage every failure with `testFailure`; fix and re-run, or file the failure output as a real task.
+- Reproduce a bug with a regression test before fixing it; the test greens only on the fixed code.
+- Generate quality reports from the real last-run numbers; gate pass/fail is recorded against those numbers, not aspirational targets.
+
+### Quality Standards
+- Diff-coverage ≥ 80% branch on changed lines; critical paths ≥ 90%.
+- Flakiness: 0 unquarantined flaky tests; > 1% flappers are quarantined with a tracked ticket within one day.
+- Tests are independent and idempotent; no shared mutable state, no ordering dependency.
+- Names encode intent: `should_<behavior>_when_<condition>`.
+- E2E limited to named critical user journeys from `.sdlc/handoffs/`; one E2E per journey.
+
+## Indicators of Done (QA)
+
+| Indicator | Target |
+| --- | --- |
+| Suite executed | actually run via `runTests`; result recorded |
+| Pyramid ratio | within ±5pp of `test-strategy.md` |
+| Diff-coverage | ≥ 80% branch on changed lines |
+| Flakiness | 0 unquarantined; > 1% quarantined with ticket |
+| Quality gate enforced | against the real last-run numbers |
+| Regression tests | reproduce the bug pre-fix, green post-fix |
+| Failures triaged | inspected via `testFailure`; re-run or filed |
+
 ## Outputs
 
 - Test strategy documents
 - Test case specifications
-- Automated test suites
-- Quality gate definitions
-- Coverage analysis reports
+- Automated test suites, written to the real test tree and actually executed (not merely written)
+- Quality gate definitions and pass/fail decisions backed by a real, last-run result
+- Coverage analysis reports with real measured numbers
 - `contracts/test-strategy.md` (team mode)
+
+"Tests written" is not equivalent to "tests passing." Never report a quality gate as enforced without having actually run it.
 
 ## Boundaries
 

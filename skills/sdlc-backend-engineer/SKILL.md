@@ -17,13 +17,14 @@ Use when the task involves:
 
 ## Centralized State Architecture
 
-On startup, verify the `.sdlc/` workspace state directory. Load the shared state baseline and record all progress and deliverables inside `.sdlc/` state files.
+On startup, verify the `.sdlc/` workspace state directory and load the shared state baseline. `.sdlc/` tracks tasks and progress — service code always goes into the project's real source tree.
 
 1. Read `architecture.md`, `contracts/db-schema.md`, and `contracts/security-requirements.md` on startup.
 2. Write API contracts to `contracts/api-contracts.md` before implementation.
-3. Claim backend tasks from `tasks/_index.md` and update status on completion.
-4. Create handoffs to Frontend Engineer (API contracts) and QA Tester (test endpoints).
-5. Append completion details and artifact paths to `.sdlc/memory.md`.
+3. Claim backend tasks from `tasks/_index.md`, implement them in the real source tree, then build and run tests; fix failures and re-run until green.
+4. Update task status on completion, citing the build/test command and result.
+5. Create handoffs to Frontend Engineer (API contracts) and QA Tester (test endpoints).
+6. Append the artifact paths and verification result (not a prose summary) to `.sdlc/memory.md`.
 
 ## Core Capabilities
 
@@ -76,12 +77,49 @@ On startup, verify the `.sdlc/` workspace state directory. Load the shared state
 - Expose health check endpoints (`/health`, `/ready`).
 - Instrument key operations with metrics (latency, throughput, error rate).
 
+## Patterns, Rules & Standards
+
+### Professional Patterns
+- **Repository + Unit of Work**: persistence behind repositories; the service controls the transactional boundary; no SQL/ORM calls in controllers.
+- **Idempotency keys**: non-safe writes (`POST`/`PUT`/`PATCH`) accept an idempotency key; replays return the original result, never a duplicate side effect.
+- **Transactional outbox**: events/notifications that must be published are written to an outbox in the same transaction, then dispatched — never a bare `emit` after commit.
+- **Circuit breaker + timeout on every outbound call**: no external dependency call without a timeout and a failure-mode policy (breaker, bulkhead, or fail-fast).
+- **Bulkhead**: isolate pools per dependency so one slow downstream cannot starve the whole process.
+- **Backpressure on streams**: streaming responses enforce flow control; consumers do not buffer unboundedly.
+- **Versioned contracts**: APIs versioned via path (`/api/v1/`) or content negotiation; breaking changes bump the version.
+- **problem+json errors**: stable `code`, human `message`, field-level `details`; never leak stack traces or raw DB errors.
+- **Pagination cursor over offset**: list endpoints default to cursor pagination; offset only for bounded small lists.
+
+### Process Rules
+- **Contract-first**: `.sdlc/contracts/api-contracts.md` is updated and reviewed before endpoint code; the contract is the source of truth.
+- **Contract changelog + handoff on every change**: each contract edit adds a timestamped changelog entry and a handoff to Frontend/QA.
+- **Service-level integration tests**: every HTTP handler has an integration test; every public service method has a unit test.
+- **Build + test before done**: exact `runTasks`/`runTests` command and result cited in `progress.md`; no prose-only completion.
+
+### Quality Standards
+- **p95 latency budget per endpoint**: declared in `systemPatterns.md`; the implementation must stay within it.
+- **Error code stability**: error `code` values are documented in the contract and unchanged across changes.
+- **Zero SQL injection surface**: every query parameterized; 0 concatenated user input.
+- **N+1 queries eliminated**: every query path has an index; N+1 patterns flagged and resolved.
+
+## Indicators of Done (Backend Engineer)
+
+| Indicator | Target |
+| --- | --- |
+| Contract-first | `.sdlc/contracts/api-contracts.md` reviewed before endpoint code |
+| Build | passes via `runTasks`/`execute`; command + result cited in `progress.md` |
+| Tests | unit + integration green; pass/fail/coverage numbers cited from a real run |
+| Idempotency | non-safe writes accept an idempotency key and replay safely |
+| p95 latency | per-endpoint p95 ≤ budget declared in `systemPatterns.md` |
+| Error codes | documented in the contract and stable across the change |
+| Outbound calls | 100% wrapped in circuit breaker + timeout |
+
 ## Outputs
 
-- API endpoint implementations with proper error handling
+- API endpoint implementations with proper error handling, built and tested in the real source tree
 - API contract documentation (request/response schemas)
 - Integration adapters for external services
-- Task status updates (team mode)
+- Task status updates citing the real build/test command and result (team mode)
 
 ## Boundaries
 

@@ -1,7 +1,7 @@
 ---
 name: 'Electron Code Reviewer'
 description: 'Code Review Mode tailored for Electron apps with Node.js main processes, Angular renderers, and native integration layers.'
-tools: ['vscode', 'execute', 'read', 'todo']
+tools: [vscode, execute, read, agent, edit, search, web, browser, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment, todo]
 ---
 
 # Electron Code Reviewer

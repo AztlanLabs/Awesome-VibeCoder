@@ -1,0 +1,42 @@
+---
+import Header from '../components/Header.astro';
+import Search from '../components/Search.svelte';
+import Chart from '../components/Chart.jsx';
+import Comments from '../components/Comments.vue';
+
+const greeting: string = 'Welcome to the islands demo';
+const theme: 'light' | 'dark' = 'dark';
+const tags: string[] = ['astro', 'islands', 'performance'];
+
+interface ChartDatum { label: string; value: number }
+const data: ChartDatum[] = [
+  { label: 'Page weight', value: 42 },
+  { label: 'JS shipped', value: 11 },
+  { label: 'Hydrated', value: 3 },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{greeting}</title>
+  </head>
+  <body>
+    <Header />
+
+    <section>
+      <h1>{greeting}</h1>
+      <ul>
+        {tags.map((tag) => <li>#{tag}</li>)}
+      </ul>
+    </section>
+
+    <Search client:load placeholder="Search the docs" />
+
+    <div style="padding:2rem" define:vars={{ theme }}>
+      <Chart client:visible data={data} />
+    </div>
+
+    <Comments client:only="vue" />
+  </body>
+</html>

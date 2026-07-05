@@ -1,6 +1,6 @@
 # Agents
 
-This repository currently includes 32 active agent definitions in [agents/](../agents/) (with 13 deprecated agents moved to the [deprecate/agents/](../deprecate/agents/) directory). They represent a personal working set of Copilot agent modes for planning, implementation, review, architecture, research, and specialized Software Development Lifecycle (SDLC) workflows.
+This repository currently includes 35 active agent definitions in [agents/](../agents/) (with 13 deprecated agents moved to the [deprecate/agents/](../deprecate/agents/) directory). They represent a personal working set of Copilot agent modes for planning, implementation, review, architecture, research, and specialized Software Development Lifecycle (SDLC) workflows.
 
 ## Modular SDLC Agents (New)
 
@@ -38,6 +38,7 @@ These agents cover non-SDLC or specialized workflows and remain fully active:
 | --- | --- |
 | [Beast.agent.md](../agents/Beast.agent.md) | Context-first autonomous coding workflow |
 | [CoderBeast.agent.md](../agents/CoderBeast.agent.md) | Prompt-driven autonomous coding workflow |
+| [context-researcher.agent.md](../agents/context-researcher.agent.md) | Investigates code, bugs, and issues, producing an evidence-backed research file before implementation |
 | [ExpertCoder.agent.md](../agents/ExpertCoder.agent.md) | Hybrid prompt-driven autonomous coding and planning workflow |
 | [gpt-5-beast-mode.agent.md](../agents/gpt-5-beast-mode.agent.md) | Beast Mode 2.0 autonomous troubleshooting and tool execution |
 | [planning-agent.agent.md](../agents/planning-agent.agent.md) | Planning-only entry point for specs, architecture, and plans |
@@ -51,6 +52,8 @@ These agents cover non-SDLC or specialized workflows and remain fully active:
 | [electron-angular-native.agent.md](../agents/electron-angular-native.agent.md) | Code reviewer for Electron, Angular, and native stacks |
 | [modernization.agent.md](../agents/modernization.agent.md) | Human-in-the-loop legacy project modernization planner |
 | [refine-issue.agent.md](../agents/refine-issue.agent.md) | Requirement and GitHub issue refinement |
+| [web-design-system-engineer.agent.md](../agents/web-design-system-engineer.agent.md) | Design tokens, component primitives, theming, accessibility primitives |
+| [web-performance-engineer.agent.md](../agents/web-performance-engineer.agent.md) | Core Web Vitals and asset budgets — profile, remediate, enforce in CI |
 
 ---
 

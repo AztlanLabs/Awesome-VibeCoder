@@ -70,6 +70,122 @@ cookbooks:
           - mcp
           - wcag
 
+  - id: web-dev
+    name: Web Development
+    description: Production recipes for Node.js, React, Next.js, Astro, Svelte, and Vue — patterns, structures, and runnable examples
+    path: cookbook/web-dev
+    featured: true
+    languages:
+      - id: nodejs
+        name: Node.js / TypeScript
+        icon: "\uE628"
+        extension: .ts
+      - id: react
+        name: React 19
+        icon: "\uE613"
+        extension: .tsx
+      - id: nextjs
+        name: Next.js 16
+        icon: "\uE7B5"
+        extension: .tsx
+      - id: astro
+        name: Astro 5
+        icon: "\uE73C"
+        extension: .astro
+      - id: svelte
+        name: Svelte 5
+        icon: "\uE73C"
+        extension: .svelte
+      - id: vue
+        name: Vue 3
+        icon: "\uE73C"
+        extension: .vue
+    recipes:
+      - id: nodejs-streaming-responses
+        name: Node.js - Streaming HTTP Responses
+        description: Chunked responses with ReadableStream, backpressure, and disconnect cancellation
+        tags: [nodejs, http, streaming, backpressure]
+      - id: nodejs-graceful-shutdown
+        name: Node.js - Graceful Shutdown
+        description: Drain in-flight requests, deadline-bounded exit, and readiness probe participation
+        tags: [nodejs, reliability, shutdown, ops]
+      - id: nodejs-structured-logger
+        name: Node.js - Structured Logger
+        description: Leveled JSON logger with child loggers, redaction, and async sinks
+        tags: [nodejs, logging, observability]
+      - id: nodejs-worker-threads-pool
+        name: Node.js - Worker Threads Pool
+        description: Bounded worker_threads pool with task queue and error propagation
+        tags: [nodejs, concurrency, performance]
+      - id: nodejs-rate-limiter
+        name: Node.js - Rate Limiter
+        description: Token-bucket + sliding-window limiter as composable http middleware
+        tags: [nodejs, rate-limiting, middleware]
+      - id: react-data-fetching-suspense
+        name: React - Data Fetching with Suspense
+        description: use() + Suspense + ErrorBoundary with a tiny promise cache
+        tags: [react, suspense, data-fetching, react-19]
+      - id: react-form-actions
+        name: React - Form Actions
+        description: useActionState + useFormStatus with async validation and progressive enhancement
+        tags: [react, forms, useActionState, react-19]
+      - id: react-optimistic-updates
+        name: React - Optimistic Updates
+        description: useOptimistic + useTransition with rollback on failure
+        tags: [react, optimistic, useTransition, react-19]
+      - id: react-compound-components
+        name: React - Compound Components
+        description: Accessible Tabs sharing context with keyboard nav and ARIA roles
+        tags: [react, compound, accessibility, patterns]
+      - id: react-error-boundaries
+        name: React - Error Boundaries
+        description: Class ErrorBoundary with reset key, reporter hook, and Suspense composition
+        tags: [react, error-handling, suspense]
+      - id: nextjs-server-actions-validation
+        name: Next.js - Server Actions with Validation
+        description: Server Action with typed prevState, useActionState, and progressive enhancement
+        tags: [nextjs, server-actions, forms]
+      - id: nextjs-middleware-auth
+        name: Next.js - Middleware Auth
+        description: Route protection via JWT/cookie check with redirects and matcher config
+        tags: [nextjs, middleware, auth, app-router]
+      - id: nextjs-streaming-ssr
+        name: Next.js - Streaming SSR
+        description: Suspense + loading.tsx with slow data fetches and partial HTML flush
+        tags: [nextjs, streaming, suspense, ssr]
+      - id: nextjs-route-handlers-streaming
+        name: Next.js - Streaming Route Handlers
+        description: Route Handler returning a ReadableStream body with SSE, backpressure, and AbortController
+        tags: [nextjs, route-handler, sse, streaming]
+      - id: nextjs-isr-on-demand
+        name: Next.js - On-Demand ISR
+        description: revalidatePath/revalidateTag from a Route Handler and Server Action with tag-based cache
+        tags: [nextjs, isr, caching, revalidation]
+      - id: astro-content-collections
+        name: Astro - Content Collections
+        description: Content Layer API config with zod and type-safe getCollection/getEntry queries
+        tags: [astro, content, typescript]
+      - id: astro-islands-architecture
+        name: Astro - Islands Architecture
+        description: "client: directives and choosing the right hydration strategy per component"
+        tags: [astro, islands, hydration, performance]
+      - id: svelte-stores-reactivity
+        name: Svelte 5 - Runes Reactivity
+        description: $state, $derived, $effect in .svelte.ts modules and passing reactive state
+        tags: [svelte, runes, reactivity]
+      - id: svelte-transitions-actions
+        name: Svelte - Transitions & Actions
+        description: "fade/fly/slide transitions and custom use: actions with cleanup"
+        tags: [svelte, transitions, actions]
+      - id: vue-composables-pinia
+        name: Vue 3 - Composables & Pinia
+        description: Composition API composables and a setup-style defineStore store
+        tags: [vue, composables, pinia, composition-api]
+      - id: vue-sfc-script-setup
+        name: Vue 3 - SFC Script Setup
+        description: defineProps/defineEmits/defineModel, useTemplateRef, and typed provide/inject
+        tags: [vue, sfc, script-setup, defineModel]
+
   - id: community-samples
     name: Community Samples
     description: Community-contributed projects and examples for GitHub Copilot

@@ -53,8 +53,8 @@ Run agents in this order. Skip any role that isn't needed for your project.
 
 1. Start at Step 1 (or whichever step makes sense for your project).
 2. Run the agent for that step.
-3. The agent reads `.sdlc/` state, does its work, and writes results back.
-4. Move to the next step.
+3. The agent reads `.sdlc/` state, does its work, and writes results back. For implementer roles (Steps 6–12, 14), this means: real code/tests/IaC written to the project's source tree, an actual build/test/validation run, and only then a pointer + result recorded in `.sdlc/progress.md`/`memory.md` — see each agent's "Definition of Done" section.
+4. Move to the next step only once that Definition of Done is satisfied (or explicitly documented as blocked).
 5. Repeat until all needed steps are complete.
 
 ## Customization

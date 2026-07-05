@@ -1,7 +1,7 @@
 ---
 name: 'Idea Generator'
 description: 'Brainstorm and develop new application ideas through fun, interactive questioning until ready for specification creation.'
-tools: ['vscode', 'execute', 'read', 'agent', 'todo']
+tools: [vscode, execute, read, agent, edit, search, web, browser, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment, todo]
 ---
 
 # Idea Generator
