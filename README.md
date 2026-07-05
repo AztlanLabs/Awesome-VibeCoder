@@ -123,6 +123,7 @@ To explore the deeper technical details of the ecosystem, refer to the guides be
 *   **[System Instructions](docs/README.instructions.md)**: Guide to language conventions, framework configurations, and security guardrails.
 *   **[Skills & Runbooks](docs/README.skills.md)**: Overview of foldered skills, trigger conditions, and implementation templates.
 *   **[Multi-Agent Workflows](docs/README.workflows.md)**: Sequential vs parallel configurations and orchestration rules.
+*   **[Integration Guides](docs/integrations/README.md)**: How to link agents, skills, instructions, workflows, and MCP into **opencode**, **Claude Code**, **GitHub Copilot**, **Cursor**, and **Antigravity** — one step-by-step guide per host. Includes a [ready-to-paste `docs/opencode.json`](docs/opencode.json) wiring all 35 agents, a [cross-host compatibility analysis](docs/integrations/compatibility.md), and the [`scripts/agent-frontmatter-adapter.py`](scripts/agent-frontmatter-adapter.py) translator so the same `.agent.md` works across all four hosts.
 *   **[MCP Integration Guide](docs/mcp-integration-guide.md)**: Configuring Model Context Protocol tools for backend and frontend agent workflows.
 
 ---

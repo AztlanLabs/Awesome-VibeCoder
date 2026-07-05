@@ -102,6 +102,18 @@ Every SDLC role agent and matching skill carries two uniform sections so quality
 
 Implementation roles (Developer, Backend, Frontend, Full Stack, DB Developer, Cybersecurity Developer, QA, DevOps) additionally retain the existing narrative **Definition of Done** block that requires a real build/test run with the command and result cited in `progress.md` — gate evidence, not status.
 
+## Wiring the System Into a Coding Tool
+
+Step-by-step guides for linking agents, skills, instructions, workflows, and MCP into each host are in [`docs/integrations/`](integrations/README.md):
+
+- [opencode](integrations/opencode.md)
+- [Claude Code](integrations/claude-code.md)
+- [GitHub Copilot](integrations/github-copilot.md)
+- [Cursor](integrations/cursor.md)
+- [Antigravity](integrations/antigravity.md)
+
+For the older Copilot-flavoured MCP reference, see [mcp-integration-guide.md](mcp-integration-guide.md).
+
 ## Workflows
 
 ### Sequential (Recommended for Most Projects)

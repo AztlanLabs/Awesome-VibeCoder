@@ -15,6 +15,9 @@ We welcome additions across all core folders:
 *   **Skills (`/skills`)**: Task-centric runbooks with templates and execution flows.
 *   **Workflows (`/workflows`)**: Orchestration blueprints mapping out sequential or concurrent agent execution phases.
 *   **Cookbooks (`/cookbook`)**: Reusable code recipes and implementation patterns (e.g. for the GitHub Copilot SDK).
+*   **Integration Guides (`/docs/integrations`)**: One step-by-step guide per host (opencode, Claude Code, GitHub Copilot, Cursor, Antigravity) showing how to link agents, skills, instructions, workflows, and MCP into that tool.
+*   **`docs/opencode.json`**: Ready-to-paste, fully-populated opencode config wiring all 35 agents + skills + workflows + MCP.
+*   **Cross-host portability**: The [compatibility guide](docs/integrations/compatibility.md) and [`scripts/agent-frontmatter-adapter.py`](scripts/agent-frontmatter-adapter.py) translate a repo `agents/*.agent.md` into Claude / opencode / Cursor frontmatter so the same source files work across all four hosts without per-host rewrites.
 
 ### 2. Enhancing Existing Assets
 You can refine existing instructions, optimize agent prompts, or improve the documentation as AI capabilities and framework guidelines evolve.

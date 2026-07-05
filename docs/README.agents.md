@@ -10,23 +10,23 @@ We have introduced a set of **17 modular, standalone-first agents** designed for
 
 | Agent File | Role / Domain | Focus Areas |
 | --- | --- | --- |
-| [sdlc-orchestrator.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-orchestrator.agent.md) | Orchestrator | Workspace initialization, task decomposition, progress monitoring |
-| [sdlc-software-architect.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-software-architect.agent.md) | Software Architect | Bounded contexts, system boundaries, ADRs, component maps |
-| [sdlc-developer.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-developer.agent.md) | General Developer | SOLID clean-code implementation, code refactoring |
-| [sdlc-frontend-engineer.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-frontend-engineer.agent.md) | Frontend Engineer | UI components, accessibility (WCAG 2.1 AA), state management, performance |
-| [sdlc-backend-engineer.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-backend-engineer.agent.md) | Backend Engineer | REST/GraphQL API design, service layers, error handling |
-| [sdlc-fullstack-engineer.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-fullstack-engineer.agent.md) | Full Stack Engineer | Vertical slice features spanning both backend and frontend layers |
-| [sdlc-ux-ui-designer.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-ux-ui-designer.agent.md) | UX/UI Designer | JTBD analysis, user journeys, wireframe flow specifications |
-| [sdlc-db-architect.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-db-architect.agent.md) | DB Architect | Data modeling, schema normalization, ERDs, migration strategies |
-| [sdlc-db-developer.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-db-developer.agent.md) | DB Developer | T-SQL / SQL optimization, stored procedures, migration scripts |
-| [sdlc-cybersecurity-architect.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-cybersecurity-architect.agent.md) | Security Architect | STRIDE threat modeling, authentication, Zero Trust boundaries |
-| [sdlc-cybersecurity-developer.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-cybersecurity-developer.agent.md) | Security Developer | Vulnerability remediation (OWASP), secure coding, security tests |
-| [sdlc-qa-tester.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-qa-tester.agent.md) | QA Tester | Automated tests (unit, integration, E2E), quality gates |
-| [sdlc-devops-engineer.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-devops-engineer.agent.md) | DevOps Engineer | CI/CD pipelines, IaC (Terraform), infrastructure configurations |
-| [sdlc-technical-writer.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-technical-writer.agent.md) | Technical Writer | Developer documentation, API references, architecture docs, guides |
-| [sdlc-product-manager.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-product-manager.agent.md) | Product Manager | User stories, requirements gathering, issue creation, prioritizations |
-| [sdlc-responsible-ai.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-responsible-ai.agent.md) | Responsible AI | Bias checks, accessibility compliance, privacy reviews, ethics |
-| [sdlc-scrum-master.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-scrum-master.agent.md) | Scrum Master | Sprint planning, agile ceremony guidance, blockers removal |
+| [sdlc-orchestrator.agent.md](../agents/agents/sdlc-orchestrator.agent.md) | Orchestrator | Workspace initialization, task decomposition, progress monitoring |
+| [sdlc-software-architect.agent.md](../agents/agents/sdlc-software-architect.agent.md) | Software Architect | Bounded contexts, system boundaries, ADRs, component maps |
+| [sdlc-developer.agent.md](../agents/agents/sdlc-developer.agent.md) | General Developer | SOLID clean-code implementation, code refactoring |
+| [sdlc-frontend-engineer.agent.md](../agents/agents/sdlc-frontend-engineer.agent.md) | Frontend Engineer | UI components, accessibility (WCAG 2.1 AA), state management, performance |
+| [sdlc-backend-engineer.agent.md](../agents/agents/sdlc-backend-engineer.agent.md) | Backend Engineer | REST/GraphQL API design, service layers, error handling |
+| [sdlc-fullstack-engineer.agent.md](../agents/agents/sdlc-fullstack-engineer.agent.md) | Full Stack Engineer | Vertical slice features spanning both backend and frontend layers |
+| [sdlc-ux-ui-designer.agent.md](../agents/agents/sdlc-ux-ui-designer.agent.md) | UX/UI Designer | JTBD analysis, user journeys, wireframe flow specifications |
+| [sdlc-db-architect.agent.md](../agents/agents/sdlc-db-architect.agent.md) | DB Architect | Data modeling, schema normalization, ERDs, migration strategies |
+| [sdlc-db-developer.agent.md](../agents/agents/sdlc-db-developer.agent.md) | DB Developer | T-SQL / SQL optimization, stored procedures, migration scripts |
+| [sdlc-cybersecurity-architect.agent.md](../agents/agents/sdlc-cybersecurity-architect.agent.md) | Security Architect | STRIDE threat modeling, authentication, Zero Trust boundaries |
+| [sdlc-cybersecurity-developer.agent.md](../agents/agents/sdlc-cybersecurity-developer.agent.md) | Security Developer | Vulnerability remediation (OWASP), secure coding, security tests |
+| [sdlc-qa-tester.agent.md](../agents/agents/sdlc-qa-tester.agent.md) | QA Tester | Automated tests (unit, integration, E2E), quality gates |
+| [sdlc-devops-engineer.agent.md](../agents/agents/sdlc-devops-engineer.agent.md) | DevOps Engineer | CI/CD pipelines, IaC (Terraform), infrastructure configurations |
+| [sdlc-technical-writer.agent.md](../agents/agents/sdlc-technical-writer.agent.md) | Technical Writer | Developer documentation, API references, architecture docs, guides |
+| [sdlc-product-manager.agent.md](../agents/agents/sdlc-product-manager.agent.md) | Product Manager | User stories, requirements gathering, issue creation, prioritizations |
+| [sdlc-responsible-ai.agent.md](../agents/agents/sdlc-responsible-ai.agent.md) | Responsible AI | Bias checks, accessibility compliance, privacy reviews, ethics |
+| [sdlc-scrum-master.agent.md](../agents/agents/sdlc-scrum-master.agent.md) | Scrum Master | Sprint planning, agile ceremony guidance, blockers removal |
 
 ---
 

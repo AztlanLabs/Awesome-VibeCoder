@@ -6,7 +6,7 @@ This repository contains workflow definitions under [workflows/](../workflows/) 
 
 We provide two primary workflows for executing multi-agent software development lifecycle (SDLC) projects:
 
-### 1. [SDLC Sequential Workflow](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/workflows/sdlc-sequential.workflow.md)
+### 1. [SDLC Sequential Workflow](../workflows/sdlc-sequential.workflow.md)
 
 Runs agents one at a time. The user controls the pace, reviewing progress after each agent finishes before running the next agent.
 
@@ -23,7 +23,7 @@ Runs agents one at a time. The user controls the pace, reviewing progress after 
   9. **QA Tester** (`sdlc-qa-tester`)
   10. **DevOps Engineer** (`sdlc-devops-engineer`)
 
-### 2. [SDLC Parallel Workflow](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/workflows/sdlc-parallel.workflow.md)
+### 2. [SDLC Parallel Workflow](../workflows/sdlc-parallel.workflow.md)
 
 Runs agents concurrently when their tasks have no dependencies on each other. This workflow defines stages and concurrency boundaries.
 
@@ -39,7 +39,7 @@ Runs agents concurrently when their tasks have no dependencies on each other. Th
 ## How to Run Workflows
 
 Workflows rely on the shared knowledge layer `.sdlc/` created in the target project. To execute:
-1. Initialize the workspace state (usually via [sdlc-orchestrator.agent.md](file:///home/crowne/Documents/Documents/VS%20Code/Awesome-VibeCoder/agents/sdlc-orchestrator.agent.md) or by asking any agent to scaffold the directory).
+1. Initialize the workspace state (usually via [sdlc-orchestrator.agent.md](../agents/sdlc-orchestrator.agent.md) or by asking any agent to scaffold the directory).
 2. Execute the workflow files using your orchestration runner or step-by-step manually.
 
 ## Related Areas

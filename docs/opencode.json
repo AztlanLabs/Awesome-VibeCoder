@@ -1,0 +1,384 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "username": "vibecoder",
+  "logLevel": "INFO",
+  "share": "manual",
+  "autoupdate": "notify",
+  "snapshot": true,
+  "default_agent": "sdlc-orchestrator",
+  "instructions": [
+    "./instructions/prompt.instructions.md",
+    "./instructions/context-engineering.instructions.md",
+    "./instructions/security-and-owasp.instructions.md",
+    "./instructions/a11y.instructions.md",
+    "./instructions/self-explanatory-code-commenting.instructions.md",
+    "./instructions/update-docs-on-code-change.instructions.md",
+    "./instructions/code-review-generic.instructions.md",
+    "./instructions/performance-optimization.instructions.md",
+    "./instructions/oop-design-patterns.instructions.md",
+    "./instructions/object-calisthenics.instructions.md"
+  ],
+  "skills": {
+    "paths": [
+      "./skills",
+      "./.github/skills"
+    ]
+  },
+  "references": {
+    "sdlc-system": {
+      "path": "./docs/README.sdlc-system.md",
+      "description": "SDLC shared-state architecture, role catalog, professional standards, handoff protocol"
+    },
+    "integrations": {
+      "path": "./docs/integrations/README.md",
+      "description": "How to link agents/skills/instructions/workflows/MCP into each coding host"
+    },
+    "agents-catalog": {
+      "path": "./docs/README.agents.md",
+      "description": "Inventory of every role agent and its focus"
+    },
+    "skills-catalog": {
+      "path": "./docs/README.skills.md",
+      "description": "Inventory of every skill and its trigger"
+    },
+    "workflows-catalog": {
+      "path": "./docs/README.workflows.md",
+      "description": "Sequential and parallel SDLC workflow blueprints"
+    }
+  },
+  "permission": {
+    "edit": "allow",
+    "bash": "ask",
+    "task": "allow",
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "external_directory": { "*": "allow" }
+  },
+  "mcp": {
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp@latest", "--caps=vision"],
+      "enabled": true,
+      "env": {}
+    },
+    "github": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "enabled": true,
+      "env": { "GITHUB_TOKEN": "{env:GITHUB_TOKEN}" }
+    }
+  },
+  "command": {
+    "sdlc-init": {
+      "description": "Scaffold .sdlc/ shared state and decompose a goal into role-assigned tasks.",
+      "prompt": "Load ./agents/sdlc-orchestrator.agent.md and execute its workspace initialization + goal decomposition workflow. Create .sdlc/ if missing; write tasks to .sdlc/tasks/ with acceptance criteria, role, and dependencies; update .sdlc/tasks/_index.md."
+    },
+    "sdlc-sequential": {
+      "description": "Run the SDLC sequential workflow phase by phase against .sdlc/.",
+      "prompt": "Load ./agents/sdlc-orchestrator.agent.md and ./workflows/sdlc-sequential.workflow.md. Execute the sequential workflow: dispatch each role subagent in order, gate each phase on a real command+result cited in .sdlc/progress.md, advance only on evidence."
+    },
+    "sdlc-parallel": {
+      "description": "Run the SDLC parallel workflow with dependency gates against .sdlc/.",
+      "prompt": "Load ./agents/sdlc-orchestrator.agent.md and ./workflows/sdlc-parallel.workflow.md. Execute its phases concurrently where no dependencies conflict; enforce dependency gates between phases using evidence in .sdlc/progress.md."
+    },
+    "sdlc-status": {
+      "description": "Read .sdlc/progress.md and report task status, blocked items, and pending handoffs.",
+      "prompt": "Read .sdlc/progress.md, .sdlc/tasks/_index.md, and .sdlc/handoffs/_index.md. Report: completed tasks (with their cited command+result), in-flight tasks, blocked tasks (with the blocker), and unacknowledged handoffs. Do not advance phases."
+    },
+    "sdlc-handoff": {
+      "description": "List pending handoffs in .sdlc/handoffs/ awaiting acknowledgement.",
+      "prompt": "Read .sdlc/handoffs/_index.md. For each unacknowledged handoff, report the source role, target role, artifact paths, and the gate that produced it. Do not acknowledge on the user's behalf."
+    }
+  },
+  "agent": {
+    "sdlc-orchestrator": {
+      "mode": "primary",
+      "description": "Initialize .sdlc/, decompose a goal into role-assigned tasks, dispatch SDLC role subagents (sequential or parallel), and gate phase advancement on real build/test evidence in .sdlc/progress.md. Use proactively for multi-agent SDLC work.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", ".github/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/sdlc-orchestrator.agent.md and follow it exactly as your operating manual; the repo file overrides any contradiction in this default prompt.\n\nMandatory skill: skills/sdlc-shared-memory. When the Agent/Task tool is available, dispatch the next role subagent directly rather than only recommending it. Advance a phase only when .sdlc/progress.md cites a real command + result for that phase — never on COMPLETED status alone."
+    },
+    "sdlc-software-architect": {
+      "mode": "subagent",
+      "description": "System design, technology selection, component boundaries, scalability patterns, and ADRs. Use when defining architecture, writing ADRs, or evaluating trade-offs.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow", ".github/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/sdlc-software-architect.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-software-architect. Write architecture to .sdlc/architecture.md, patterns to .sdlc/systemPatterns.md, ADRs to .sdlc/decisions/ADR-*.md. Hand off to implementation roles when architecture deliverables are finalized."
+    },
+    "sdlc-developer": {
+      "mode": "subagent",
+      "description": "General-purpose clean-code implementation (SOLID, design patterns, refactoring). Use when implementing features not owned by a specialist role.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-developer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-developer. Write source to the real source tree (never .sdlc/). Build + run tests; cite command + result in .sdlc/progress.md; append a one-line pointer to .sdlc/memory.md."
+    },
+    "sdlc-frontend-engineer": {
+      "mode": "subagent",
+      "description": "Senior frontend engineering — UI components, state management, WCAG 2.2 AA accessibility, Core Web Vitals. Use when implementing or reviewing UI.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-frontend-engineer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-frontend-engineer; load skills/web-accessibility-audit and skills/web-performance-budget when relevant. Consume .sdlc/contracts/api-contracts.md unchanged; write UI to the real source tree; run build + component tests and cite the result in .sdlc/progress.md."
+    },
+    "sdlc-backend-engineer": {
+      "mode": "subagent",
+      "description": "API design, service implementation, data access, integration patterns, observability. Use when implementing APIs or services.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-backend-engineer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-backend-engineer. Write API contracts to .sdlc/contracts/api-contracts.md BEFORE implementing endpoints in the real source tree; run build + integration tests and cite the result in .sdlc/progress.md."
+    },
+    "sdlc-fullstack-engineer": {
+      "mode": "subagent",
+      "description": "End-to-end vertical-slice features spanning frontend and backend. Use when a feature crosses both layers and contract-first integration is needed.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-fullstack-engineer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-fullstack-engineer. Consume both .sdlc/contracts/api-contracts.md and .sdlc/contracts/db-schema.md unchanged; build + run e2e tests and cite the result in .sdlc/progress.md."
+    },
+    "sdlc-ux-ui-designer": {
+      "mode": "subagent",
+      "description": "JTBD analysis, user journey mapping, flow specs, design tokens, WCAG 2.2 AA requirements. Use for UX research and design handoffs.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/sdlc-ux-ui-designer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-ux-ui-designer, skills/web-design-system. Write journeys/flows/a11y-requirements/design-tokens to docs/ux/. Hand off specs to sdlc-frontend-engineer."
+    },
+    "sdlc-db-architect": {
+      "mode": "subagent",
+      "description": "Data modeling, schema normalization, indexing, sharding/partitioning, migration strategy. Use when designing the data model.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/sdlc-db-architect.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-db-architect. Write the schema contract to .sdlc/contracts/db-schema.md, ERD to .sdlc/decisions/, and migration strategy to .sdlc/architecture.md."
+    },
+    "sdlc-db-developer": {
+      "mode": "subagent",
+      "description": "Query optimization, stored procedures, reversible migrations, transaction discipline. Use when writing SQL or migrations.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-db-developer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-db-developer. Write migrations (expand-contract, reversible) to the real source tree; run them and EXPLAIN queries; cite commands + results in .sdlc/progress.md."
+    },
+    "sdlc-cybersecurity-architect": {
+      "mode": "subagent",
+      "description": "STRIDE/DREAD threat modeling, Zero Trust boundaries, authn/authz architecture, compliance mapping. Use when designing security controls.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/sdlc-cybersecurity-architect.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-cybersecurity-architect. Write security-requirements to .sdlc/contracts/security-requirements.md and ADRs for crypto/auth decisions; record residual risks for user acceptance."
+    },
+    "sdlc-cybersecurity-developer": {
+      "mode": "subagent",
+      "description": "OWASP remediation, secure coding, security tests, SAST/DAST/SCA configuration. Use when implementing security controls or remediating findings.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-cybersecurity-developer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-cybersecurity-developer. Implement controls in the real source tree; run security tests + SAST/DAST gates and cite the command + result in .sdlc/progress.md; never log/commit secrets."
+    },
+    "sdlc-qa-tester": {
+      "mode": "subagent",
+      "description": "Test strategy (pyramid), automation (unit/integration/e2e), coverage, quality gates, flakiness quarantine. Use when writing tests or enforcing quality gates.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-qa-tester.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-qa-tester. Write tests to the real source tree; run the full suite and cite pass/fail/coverage numbers from a real run in .sdlc/progress.md; quarantine flaky tests and open follow-ups."
+    },
+    "sdlc-devops-engineer": {
+      "mode": "subagent",
+      "description": "CI/CD pipelines, IaC (Terraform/Pulumi), containerization, observability (SLO/SLI), zero-downtime releases with tested rollback. Use for pipelines and infra.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-devops-engineer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-devops-engineer. Write pipelines/IaC to the real source tree; validate with terraform validate/dry-run and an actual pipeline run; cite command + result in .sdlc/progress.md."
+    },
+    "sdlc-technical-writer": {
+      "mode": "subagent",
+      "description": "Developer docs, API reference, architecture docs, tutorials, user guides (Diátaxis). Use when writing or regenerating documentation.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-technical-writer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-technical-writer. Generate API reference from .sdlc/contracts/api-contracts.md; write docs to the real source tree; check broken links; cite the check command + result in .sdlc/progress.md."
+    },
+    "sdlc-product-manager": {
+      "mode": "subagent",
+      "description": "Requirements analysis, INVEST user stories, issue management, RICE/MoSCoW prioritization, roadmap. Use for backlog and requirement work.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/sdlc-product-manager.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-product-manager. Write user stories (INVEST, testable acceptance criteria) to .sdlc/tasks/; trace each story to a goal/OKR."
+    },
+    "sdlc-responsible-ai": {
+      "mode": "subagent",
+      "description": "Bias prevention, accessibility compliance, ethical AI, privacy-by-design, inclusive review (NIST AI RMF). Use for responsible-AI review of AI/ML features.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/sdlc-responsible-ai.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-responsible-ai, skills/web-accessibility-audit. Record bias/privacy/accessibility/transparency findings to .sdlc/decisions/ and report human-in-the-loop requirements for high-impact decisions."
+    },
+    "sdlc-scrum-master": {
+      "mode": "subagent",
+      "description": "Agile coaching, sprint planning, ceremony facilitation, impediment removal, flow metrics (cycle/lead time). Use for sprint and process work.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/sdlc-scrum-master.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-scrum-master. Maintain sprint goal + capacity in .sdlc/tasks/; log impediments with owner + ETA; produce ≤3 actionable retro improvements per sprint."
+    },
+    "web-design-system-engineer": {
+      "mode": "subagent",
+      "description": "Design tokens (tiered), theming, primitive APIs, accessibility primitives, Figma↔code sync, versioning. Use when building or extending the design system.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/web-design-system-engineer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/web-design-system. Write tokens/primitives to the real source tree; run tokens:lint, tokens:contrast, and primitive tests; cite commands + results in .sdlc/progress.md."
+    },
+    "web-performance-engineer": {
+      "mode": "subagent",
+      "description": "Core Web Vitals budgets, profile → fix → re-measure, CI gates (Lighthouse-CI + bundler budget). Use when a route is out of budget or before a perf-sensitive release.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/web-performance-engineer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/web-performance-budget. Run lh-ci and --perf-budget gates; report before/after numbers per route; never raise a threshold without a documented root cause; cite gate exit codes in .sdlc/progress.md."
+    },
+    "planning-agent": {
+      "mode": "all",
+      "description": "Produces architecture advice, formal specifications, and deterministic implementation plans for humans or AI. Does not execute product code. Use before implementation.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/planning-agent.agent.md and follow it. Output architecture advice or implementation plans; do not implement product code."
+    },
+    "context-researcher": {
+      "mode": "all",
+      "description": "Investigates code, bugs, GitHub issues, or topics across the repo and produces an evidence-backed research file pinning exact files, lines, and root causes. Use before implementation.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/context-researcher.agent.md and follow it. Produce a research file with exact file/line evidence and root-cause analysis before any implementation."
+    },
+    "Beast": {
+      "mode": "all",
+      "description": "Autonomous coding agent that maps context first, then executes end-to-end with high precision. Use for whole-task delivery when you want high autonomy.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/Beast.agent.md and follow it. Produce a Context Map before non-trivial changes; then implement to the real source tree; build + test; cite results in .sdlc/progress.md when running in an SDLC workspace."
+    },
+    "CoderBeast": {
+      "mode": "all",
+      "description": "Autonomous prompt-driven coding agent: sanitize prompt, refresh path context, execute end-to-end, maintain prompt + implementation doc in one run. Use to drive a *.prompt.md to completion.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/CoderBeast.agent.md and follow it. Execute the given prompt (inline or *.prompt.md) end-to-end and maintain the implementation document."
+    },
+    "ExpertCoder": {
+      "mode": "all",
+      "description": "Hybrid prompt-driven agent: sanitize prompt, refresh path context, generate a deterministic implementation plan, execute, then maintain the prompt + implementation doc. Use when you want planning rigor before execution.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/ExpertCoder.agent.md and follow it. Produce an explicit deterministic implementation plan, then execute it."
+    },
+    "gpt-5-beast-mode": {
+      "mode": "all",
+      "description": "Beast Mode 2.0: autonomous agent for complex problems — uses tools, researches, iterates until resolved. Use for tough, multi-step troubleshooting.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/gpt-5-beast-mode.agent.md and follow it. Iterate with tools until the problem is fully resolved."
+    },
+    "PromptFileAuthor": {
+      "mode": "all",
+      "description": "Creates, rewrites, sanitizes, and maintains .prompt.md files. Does not implement product code. Use for reusable prompt authoring.",
+      "permission": {
+        "edit": { "*": "deny", ".github/prompts/**": "allow", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/PromptFileAuthor.agent.md and follow it. Store new prompts under .github/prompts/ unless the user targets an existing prompt elsewhere. Do not implement product code."
+    },
+    "RepositoryPathAuditor": {
+      "mode": "all",
+      "description": "Runs repository technical-path audits via the technical-path-indexer skill and renders evidence-backed freshness checks or canonical technical-paths markdown. Use to audit repo structure freshness.",
+      "permission": {
+        "edit": { "*": "deny", ".github/**": "allow", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "allow",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/RepositoryPathAuditor.agent.md and skills/technical-path-indexer/SKILL.md. Run the bundled Python toolkit to obtain structured findings, then write/refresh the canonical technical-paths markdown."
+    },
+    "agent-governance-reviewer": {
+      "mode": "all",
+      "description": "Reviews code for safety, missing governance controls; helps implement policy enforcement, trust scoring, and audit trails for agent systems. Use for governance review of AI/agent code.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow", ".github/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/agent-governance-reviewer.agent.md and follow it. Produce a governance review report; only suggest hardening changes; never auto-deploy controls."
+    },
+    "refine-issue": {
+      "mode": "all",
+      "description": "Refines product requirements and GitHub issues by adding Acceptance Criteria, Technical Considerations, Edge Cases, and NFRs. Use to ready an issue for implementation.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow", ".github/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/refine-issue.agent.md and follow it. Enhance issues with INVEST-style acceptance criteria, technical considerations, edge cases, and NFRs."
+    },
+    "modernization": {
+      "mode": "all",
+      "description": "Human-in-the-loop modernization planner for analyzing, documenting, and planning whole-project modernization with architectural recommendations. Use for legacy modernization.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow", ".github/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/modernization.agent.md and follow it. Produce a modernization plan with architectural recommendations; pause for human-in-the-loop decisions."
+    },
+    "expert-react-frontend-engineer": {
+      "mode": "all",
+      "description": "Expert React 19.2 frontend engineer — modern hooks (use, useFormStatus, useOptimistic, useActionState, useEffectEvent), Server Components, Actions, TypeScript, performance. Use for advanced React 19 work.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/expert-react-frontend-engineer.agent.md and follow it. Emit production-ready React 19.2 TypeScript; leverage refs-as-prop, context without Provider, <Activity>, useEffectEvent, cacheSignal where they add value."
+    },
+    "electron-angular-native": {
+      "mode": "all",
+      "description": "Code review mode tailored for Electron apps with Node.js main processes, Angular renderers, and native integration layers. Use to review Electron/Angular/native stacks.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/electron-angular-native.agent.md and follow it. Review-only: provide findings; do not commit production changes."
+    },
+    "scientific-paper-research": {
+      "mode": "all",
+      "description": "Research agent that searches scientific literature and retrieves structured experimental data using the BGPT MCP server. Use for literature review.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/scientific-paper-research.agent.md and follow it. Produce a structured literature review; cite sources."
+    },
+    "search-ai-optimization-expert": {
+      "mode": "all",
+      "description": "Expert guidance for modern search optimization: SEO, Answer Engine Optimization (AEO), and Generative Engine Optimization (GEO) with AI-ready content. Use for discoverability/AEO/GEO.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/search-ai-optimization-expert.agent.md and follow it. Produce SEO/AEO/GEO recommendations; do not implement product code unless asked."
+    },
+    "simple-app-idea-generator": {
+      "mode": "all",
+      "description": "Brainstorm and develop new app ideas through fun, interactive questioning until ready for spec creation. Use for ideation.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/simple-app-idea-generator.agent.md and follow it. Guided, interactive ideation; surface a spec-ready idea. Ask the user clarifying questions."
+    }
+  },
+  "compaction": { "auto": true, "tail_turns": 15 }
+}
