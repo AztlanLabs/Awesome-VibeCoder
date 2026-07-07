@@ -1,0 +1,16 @@
+{
+  "_comment": "Claude Code / VS Code shape (.mcp.json or .vscode/mcp.json). For GitHub Copilot cloud agent, save this same shape as .github/mcp.json and use the COPILOT_MCP_ prefixed secret shown below instead of ${GITHUB_TOKEN} — see docs/integrations/github-copilot.md and docs/integrations/claude-code.md.",
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest", "--caps=vision"]
+    },
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": { "GITHUB_TOKEN": "${GITHUB_TOKEN}" }
+    }
+  }
+}

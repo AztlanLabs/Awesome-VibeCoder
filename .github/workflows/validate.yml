@@ -1,0 +1,61 @@
+name: Validate Assets & Adapter
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install PyYAML (for frontmatter parsing)
+        run: pip install pyyaml
+
+      # ── (a) Asset validator ──────────────────────────────────────────
+      - name: Run validate-assets.py
+        run: python3 scripts/validate-assets.py
+
+      # ── (b) Adapter self-tests ───────────────────────────────────────
+      - name: Run adapter self-tests
+        run: python3 scripts/test_adapter.py
+
+      # ── (c) Every agent adapts without error ─────────────────────────
+      - name: Adapt all agents (--stdout)
+        run: |
+          set -e
+          fail=0
+          for f in agents/*.agent.md; do
+            python3 scripts/agent-frontmatter-adapter.py \
+              --src "$f" \
+              --claude ".claude/agents/$(basename "${f%.agent.md}").md" \
+              --stdout > /dev/null || { echo "ADAPT FAILED: $f"; fail=1; }
+          done
+          exit $fail
+
+      # ── (d) opencode.json parses as valid JSON ───────────────────────
+      - name: Validate docs/opencode.json
+        run: python3 -c "import json; json.load(open('docs/opencode.json'))"
+
+      # ── (e) Integration docs have step headings ──────────────────────
+      - name: Check integration docs structure
+        run: |
+          set -e
+          for f in docs/integrations/*.md; do
+            [ "$f" = "docs/integrations/README.md" ] && continue
+            [ "$f" = "docs/integrations/compatibility.md" ] && continue
+            if ! grep -q '^## ' "$f"; then
+              echo "MISSING ## headings in $f"; exit 1
+            fi
+          done
+
+      # ── (f) Docs lint: broken links, file:/// paths, hardcoded paths ─
+      - name: Run lint-docs.py
+        run: python3 scripts/lint-docs.py

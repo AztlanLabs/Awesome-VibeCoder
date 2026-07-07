@@ -1,6 +1,6 @@
 # Skills
 
-This repository currently includes 42 root skills in [skills/](../skills/). Each skill is a task-focused folder anchored by a `SKILL.md` file and, when needed, bundled templates, examples, or workflow notes.
+This repository currently includes 47 root skills in [skills/](../skills/). Each skill is a task-focused folder anchored by a `SKILL.md` file and, when needed, bundled templates, examples, or workflow notes.
 
 ## Modular SDLC Skills (New)
 
@@ -37,14 +37,18 @@ These skills remain active for general prompt engineering, planning, refactoring
 | Skill | Purpose |
 | --- | --- |
 | [ai-prompt-engineering-safety-review](../skills/ai-prompt-engineering-safety-review/SKILL.md) | Review prompts for safety, bias, security, and effectiveness |
+| [api-contract-first](../skills/api-contract-first/SKILL.md) | OpenAPI 3.1, AsyncAPI, JSON-Schema, deprecation, idempotency-key, problem+json, cursor pagination |
 | [architecture-option-evaluator](../skills/architecture-option-evaluator/SKILL.md) | Evaluate architecture options, trade-offs, and consolidation decisions |
 | [context-map](../skills/context-map/SKILL.md) | Build a map of relevant files before making changes |
 | [context-researcher](../skills/context-researcher/SKILL.md) | Investigate code, bugs, or issues and produce an evidence-backed research file with root causes and exact files/lines |
+| [css-architecture](../skills/css-architecture/SKILL.md) | ITCSS/CUBE/BEM layering, `@layer` cascade layers, CSS Modules vs. CSS-in-JS, container queries |
 | [formal-specification-writer](../skills/formal-specification-writer/SKILL.md) | Write structured, machine-readable specifications and requirements |
 | [implementation-plan-generator](../skills/implementation-plan-generator/SKILL.md) | Generate deterministic human and AI-executable implementation plans |
+| [observability-three-pillars](../skills/observability-three-pillars/SKILL.md) | OTLP/JSON structured logs, RED/USE metrics, distributed tracing, SLO/SLI/error-budget, RUM vs LAB |
 | [planning-quality-gate](../skills/planning-quality-gate/SKILL.md) | Validate planning artifacts for ambiguity, overlap, and missing verification |
 | [premium-frontend-ui](../skills/premium-frontend-ui/SKILL.md) | Craft high-end frontend UI and interaction work |
 | [prompt-builder](../skills/prompt-builder/SKILL.md) | Create production-ready `.prompt.md` files through structured discovery |
+| [prompt-eval-and-regression](../skills/prompt-eval-and-regression/SKILL.md) | Golden outputs, model-graded evals, scorer matrix, CI integration for prompt regression testing |
 | [prompt-maintainer](../skills/prompt-maintainer/SKILL.md) | Improve an existing prompt after it has been used |
 | [prompt-markdown-sanitizer](../skills/prompt-markdown-sanitizer/SKILL.md) | Remove contradictions and ambiguity from prompt markdown |
 | [readme-blueprint-generator](../skills/readme-blueprint-generator/SKILL.md) | Generate a comprehensive repository README blueprint |
@@ -54,6 +58,7 @@ These skills remain active for general prompt engineering, planning, refactoring
 | [remember](../skills/remember/SKILL.md) | Turn lessons learned into reusable memory instructions |
 | [technical-overview-maintainer](../skills/technical-overview-maintainer/SKILL.md) | Maintain a single implementation overview document for code changes |
 | [technical-path-indexer](../skills/technical-path-indexer/SKILL.md) | Scan repository paths, routes, references, and companion-file links to emit weighted technical path indexes |
+| [technical-writing-diataxis](../skills/technical-writing-diataxis/SKILL.md) | Diátaxis validation, docstring-driven reference, runnable-example enforcement, plain-language (Hemingway/Flesch) scoring |
 | [web-coder](../skills/web-coder/SKILL.md) | Apply deep web platform knowledge across frontend and backend work |
 | [web-design-reviewer](../skills/web-design-reviewer/SKILL.md) | Inspect and fix design and layout issues visually |
 | [web-design-system](../skills/web-design-system/SKILL.md) | Design tokens (color/space/type/radius/shadow/motion), tiered model, theming, primitive APIs, Figma sync, versioning |
@@ -65,10 +70,11 @@ These skills remain active for general prompt engineering, planning, refactoring
 
 ## Directory Notes
 
-- The root [skills/](../skills/) folder is the main collection.
-- Mirrored copies also exist under [.github/skills/](../.github/skills/) for customization-library layouts.
-- Skills are designed to be standalone-first. You can copy a single skill directory to your project and reference its markdown in your own custom agents.
+- The root [skills/](../skills/) folder is the main collection and the single source of truth.
+- Skills are designed to be standalone-first. For GitHub Copilot, copy the skill directories you need into a target project's `.github/skills/` on demand — see the [GitHub Copilot integration guide](integrations/github-copilot.md) — rather than expecting a pre-populated mirror in this repo.
 
 ## Browse The Collection
 
 Open [skills/](../skills/) for the full set.
+
+To add a new skill, see the [author-skill recipe](recipes/author-skill.md).

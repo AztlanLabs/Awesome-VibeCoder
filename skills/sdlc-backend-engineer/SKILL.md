@@ -19,8 +19,8 @@ Use when the task involves:
 
 On startup, verify the `.sdlc/` workspace state directory and load the shared state baseline. `.sdlc/` tracks tasks and progress — service code always goes into the project's real source tree.
 
-1. Read `architecture.md`, `contracts/db-schema.md`, and `contracts/security-requirements.md` on startup.
-2. Write API contracts to `contracts/api-contracts.md` before implementation.
+1. Read `architecture.md`, `contracts/api-contracts.md`, `contracts/db-schema.md`, and `contracts/security-requirements.md` on startup.
+2. Implement service endpoints against the API contract in `contracts/api-contracts.md` (owned by API Designer) — do not write the contract, implement against it.
 3. Claim backend tasks from `tasks/_index.md`, implement them in the real source tree, then build and run tests; fix failures and re-run until green.
 4. Update task status on completion, citing the build/test command and result.
 5. Create handoffs to Frontend Engineer (API contracts) and QA Tester (test endpoints).
@@ -91,8 +91,8 @@ On startup, verify the `.sdlc/` workspace state directory and load the shared st
 - **Pagination cursor over offset**: list endpoints default to cursor pagination; offset only for bounded small lists.
 
 ### Process Rules
-- **Contract-first**: `.sdlc/contracts/api-contracts.md` is updated and reviewed before endpoint code; the contract is the source of truth.
-- **Contract changelog + handoff on every change**: each contract edit adds a timestamped changelog entry and a handoff to Frontend/QA.
+- **Contract-first**: `.sdlc/contracts/api-contracts.md` (owned by API Designer) is read and the implementation matches the contract; the contract is the source of truth, not the implementation.
+- **Contract changelog awareness**: track contract changelog entries from API Designer and adjust implementations; raise handoffs back to API Designer when implementation reveals contract gaps.
 - **Service-level integration tests**: every HTTP handler has an integration test; every public service method has a unit test.
 - **Build + test before done**: exact `runTasks`/`runTests` command and result cited in `progress.md`; no prose-only completion.
 
@@ -106,7 +106,7 @@ On startup, verify the `.sdlc/` workspace state directory and load the shared st
 
 | Indicator | Target |
 | --- | --- |
-| Contract-first | `.sdlc/contracts/api-contracts.md` reviewed before endpoint code |
+| Contract-first | `.sdlc/contracts/api-contracts.md` read and implementation matches contract (owned by API Designer) |
 | Build | passes via `runTasks`/`execute`; command + result cited in `progress.md` |
 | Tests | unit + integration green; pass/fail/coverage numbers cited from a real run |
 | Idempotency | non-safe writes accept an idempotency key and replay safely |
@@ -125,8 +125,7 @@ On startup, verify the `.sdlc/` workspace state directory and load the shared st
 
 ### Do
 
-- Design and implement APIs and service layers.
-- Define API contracts with schemas and examples.
+- Implement APIs and service layers against the API contract (owned by API Designer).
 - Implement data access and integration patterns.
 - Write service-level integration tests.
 

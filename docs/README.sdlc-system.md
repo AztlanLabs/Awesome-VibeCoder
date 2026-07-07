@@ -45,28 +45,37 @@ When team mode is active, agents collaborate through a file-based shared state:
 ├── systemPatterns.md            # Conventions, coding standards
 ├── tasks/                        # Task files with lifecycle tracking
 ├── decisions/                    # Architecture Decision Records
-├── contracts/                    # Cross-role agreements (API, DB, security, test)
+├── contracts/                    # Cross-role agreements (API, a11y, DB, security, test)
+│   ├── api-contracts.md          # owned by API Designer
+│   ├── a11y-requirements.md      # owned by Accessibility Specialist
+│   ├── db-schema.md              # owned by DB Architect / Developer
+│   ├── security-requirements.md  # owned by Cybersecurity Architect
+│   └── test-strategy.md          # owned by QA Tester
 ├── handoffs/                     # Agent-to-agent work transfers
 └── memory.md                     # Cross-session context
 ```
 
 ## Role Catalog
 
-### 16 Specialized Roles
+### 20 Specialized Roles
 
 | Role | Agent | Skill | Domain |
 |---|---|---|---|
+| Orchestrator | [sdlc-orchestrator](../agents/sdlc-orchestrator.agent.md) | [SKILL](../skills/sdlc-shared-memory/SKILL.md) | Workspace init, task decomposition, progress monitoring |
 | Software Architect | [sdlc-software-architect](../agents/sdlc-software-architect.agent.md) | [SKILL](../skills/sdlc-software-architect/SKILL.md) | System design, ADRs, tech evaluation |
 | Developer | [sdlc-developer](../agents/sdlc-developer.agent.md) | [SKILL](../skills/sdlc-developer/SKILL.md) | Clean code, SOLID, design patterns |
 | Frontend Engineer | [sdlc-frontend-engineer](../agents/sdlc-frontend-engineer.agent.md) | [SKILL](../skills/sdlc-frontend-engineer/SKILL.md) | UI components, accessibility, performance |
 | Backend Engineer | [sdlc-backend-engineer](../agents/sdlc-backend-engineer.agent.md) | [SKILL](../skills/sdlc-backend-engineer/SKILL.md) | APIs, services, data access |
 | Full Stack Engineer | [sdlc-fullstack-engineer](../agents/sdlc-fullstack-engineer.agent.md) | [SKILL](../skills/sdlc-fullstack-engineer/SKILL.md) | End-to-end feature delivery |
 | UX/UI Designer | [sdlc-ux-ui-designer](../agents/sdlc-ux-ui-designer.agent.md) | [SKILL](../skills/sdlc-ux-ui-designer/SKILL.md) | JTBD, journey maps, flow specs |
+| Accessibility Specialist | [sdlc-accessibility-specialist](../agents/sdlc-accessibility-specialist.agent.md) | [SKILL](../skills/web-accessibility-audit/SKILL.md) | WCAG audits, a11y requirements, remediation |
 | DB Architect | [sdlc-db-architect](../agents/sdlc-db-architect.agent.md) | [SKILL](../skills/sdlc-db-architect/SKILL.md) | Data modeling, schema, indexing |
+| API Designer | [sdlc-api-designer](../agents/sdlc-api-designer.agent.md) | [SKILL](../skills/api-contract-first/SKILL.md) | API contract design, OpenAPI specs, versioning |
 | DB Developer | [sdlc-db-developer](../agents/sdlc-db-developer.agent.md) | [SKILL](../skills/sdlc-db-developer/SKILL.md) | Queries, migrations, performance |
 | Cybersecurity Architect | [sdlc-cybersecurity-architect](../agents/sdlc-cybersecurity-architect.agent.md) | [SKILL](../skills/sdlc-cybersecurity-architect/SKILL.md) | Threat modeling, Zero Trust |
 | Cybersecurity Developer | [sdlc-cybersecurity-developer](../agents/sdlc-cybersecurity-developer.agent.md) | [SKILL](../skills/sdlc-cybersecurity-developer/SKILL.md) | OWASP review, secure coding |
 | QA Tester | [sdlc-qa-tester](../agents/sdlc-qa-tester.agent.md) | [SKILL](../skills/sdlc-qa-tester/SKILL.md) | Test strategy, automation, gates |
+| Code Reviewer | [sdlc-code-reviewer](../agents/sdlc-code-reviewer.agent.md) | [SKILL](../skills/sdlc-shared-memory/SKILL.md) | Code quality audits, SOLID/security findings, PR reviews |
 | DevOps Engineer | [sdlc-devops-engineer](../agents/sdlc-devops-engineer.agent.md) | [SKILL](../skills/sdlc-devops-engineer/SKILL.md) | CI/CD, IaC, monitoring |
 | Technical Writer | [sdlc-technical-writer](../agents/sdlc-technical-writer.agent.md) | [SKILL](../skills/sdlc-technical-writer/SKILL.md) | Docs, tutorials, API reference |
 | Product Manager | [sdlc-product-manager](../agents/sdlc-product-manager.agent.md) | [SKILL](../skills/sdlc-product-manager/SKILL.md) | Requirements, user stories, roadmap |
@@ -75,7 +84,7 @@ When team mode is active, agents collaborate through a file-based shared state:
 
 ### Optional Web Specialists
 
-Optional SDLC-family specialists for product teams that need dedicated design-system and performance ownership. They run standalone or alongside the 16 core roles.
+Optional SDLC-family specialists for product teams that need dedicated design-system and performance ownership. They run standalone or alongside the 20 core roles.
 
 | Role | Agent | Skill | Domain |
 |---|---|---|---|
@@ -143,7 +152,7 @@ See [sdlc-shared-memory SKILL](../skills/sdlc-shared-memory/SKILL.md) for the fu
 **Can I use just one agent?**
 Yes. Every agent is fully functional when run individually. It will automatically initialize the `.sdlc/` workspace baseline at your project root, write real deliverables (code/tests/docs/infra) to their proper locations, and record a pointer + verification result there — implementer roles (Developer, Frontend/Backend/Full Stack Engineer, DB Developer, Cybersecurity Developer, QA Tester, DevOps Engineer) must satisfy their agent file's "Definition of Done" (real build/test/validation run) before marking work complete.
 
-**Do I need to use all 16 roles?**
+**Do I need to use all 38 roles?**
 No. Use only the roles relevant to your project. A simple API project might use only Backend Engineer + QA Tester.
 
 **Can I run agents in any order?**

@@ -16,6 +16,7 @@ On startup, verify the `.sdlc/` workspace state directory and load the shared st
 
 - **Always load**: `skills/sdlc-devops-engineer/SKILL.md`
 - **Always load**: `skills/sdlc-shared-memory/SKILL.md`
+- **Always load**: `skills/observability-three-pillars/SKILL.md`
 
 ## Core Workflow
 

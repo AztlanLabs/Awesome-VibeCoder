@@ -16,6 +16,7 @@ On startup, verify the `.sdlc/` workspace state directory. Load the shared state
 
 - **Always load**: `skills/sdlc-technical-writer/SKILL.md`
 - **Always load**: `skills/sdlc-shared-memory/SKILL.md`
+- **Always load**: `skills/technical-writing-diataxis/SKILL.md`
 
 ## Core Workflow
 

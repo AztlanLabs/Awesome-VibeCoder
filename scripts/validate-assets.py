@@ -3,7 +3,7 @@ import re
 import yaml
 import sys
 
-workspace_dir = "/home/crowne/Documents/Documents/VS Code/Awesome-VibeCoder"
+workspace_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 errors = []
 warnings = []

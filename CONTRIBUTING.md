@@ -15,8 +15,9 @@ We welcome additions across all core folders:
 *   **Skills (`/skills`)**: Task-centric runbooks with templates and execution flows.
 *   **Workflows (`/workflows`)**: Orchestration blueprints mapping out sequential or concurrent agent execution phases.
 *   **Cookbooks (`/cookbook`)**: Reusable code recipes and implementation patterns (e.g. for the GitHub Copilot SDK).
+*   **Templates (`/templates`)**: Copy-paste starters — `ADR.md`, `task.md`, `handoff.md`, `example.prompt.md`, `copilot-instructions.md`, `opencode.json`, `mcp.json`, and the full `.sdlc/` skeleton. Start here when bootstrapping a new target project instead of hand-rolling the scaffold.
 *   **Integration Guides (`/docs/integrations`)**: One step-by-step guide per host (opencode, Claude Code, GitHub Copilot, Cursor, Antigravity) showing how to link agents, skills, instructions, workflows, and MCP into that tool.
-*   **`docs/opencode.json`**: Ready-to-paste, fully-populated opencode config wiring all 35 agents + skills + workflows + MCP.
+*   **`docs/opencode.json`**: Ready-to-paste, fully-populated opencode config wiring all 38 agents + skills + workflows + MCP.
 *   **Cross-host portability**: The [compatibility guide](docs/integrations/compatibility.md) and [`scripts/agent-frontmatter-adapter.py`](scripts/agent-frontmatter-adapter.py) translate a repo `agents/*.agent.md` into Claude / opencode / Cursor frontmatter so the same source files work across all four hosts without per-host rewrites.
 
 ### 2. Enhancing Existing Assets
@@ -70,7 +71,29 @@ Before submitting your PR, please verify:
 - [ ] No absolute local paths are used inside the repository's markdown links.
 - [ ] Markdown links reference valid folders or files in the repository.
 - [ ] Any new agent has been added to the corresponding overview tables in the root `README.md` and appropriate `docs/README.*.md` files.
+- [ ] `python3 scripts/lint-docs.py` exits 0 — it hard-gates broken internal markdown links, absolute `file:///` paths in `docs/`, and hardcoded machine-specific paths; it also warns (non-blocking) on agents/skills missing the repo's canonical section headings, useful signal when authoring new ones.
 - [ ] The change doesn't break backward compatibility for existing `.sdlc/` workspace state conventions unless documented in the PR description.
+
+---
+
+## 🌐 Cross-host contributions
+
+This repository ships one source-of-truth set of `agents/*.agent.md` files that are emitted to multiple AI coding hosts (Claude Code, opencode, Cursor, Copilot, Antigravity) **without per-host rewrites**. To keep that contract intact when you touch agent frontmatter:
+
+1. **Author the source in superset frontmatter.** Keep Copilot-style `tools:` plus host-neutral `name` + `description`. Add Claude-only extras (`mode`, `model`, `toolsClaude`, `permissionMode`, `skills`) under clearly-namespaced keys; non-matching hosts silently drop them. See [`AGENTS.md` §7](AGENTS.md) for the full 5-rule retro-compatibility protocol.
+2. **Do not hand-translate per host.** Run the adapter after editing `tools:` (or any host-only key) to regenerate the per-host files:
+   ```bash
+   python3 scripts/agent-frontmatter-adapter.py --src agents/<name>.agent.md \
+     --claude .claude/agents/<name>.md \
+     --opencode .opencode/agents/<name>.md \
+     --cursor .cursor/rules/<name>.mdc
+   ```
+   The markdown **body** is passed through unchanged to every target. Use `--backport-superset` to write Rule 1's superset back into the source.
+3. **Skills stay portable: `name` + `description` only.** Never add host-only keys (`tools`, `mode`, `permission`, `globs`, …) to a `SKILL.md`. Hosts reach skills through their tool's loader.
+4. **Cross-cutting rules live in `AGENTS.md`, not in each agent.** The `.sdlc/` contract, build/test/lint commands, the evidence gate, and the role catalog live there once. Agent bodies stay focused on role-specific workflow.
+5. **MCP servers are per-host config, never per-agent.** Server definitions belong in the host's MCP config file (`.github/mcp.json`, `mcp:` block in `opencode.json`, `.mcp.json`, `.vscode/mcp.json`, root `mcp.json`); tokens/secrets never go inside version-controlled agent bodies.
+
+Full analysis and per-host install guides: [`docs/integrations/compatibility.md`](docs/integrations/compatibility.md) and [`docs/integrations/README.md`](docs/integrations/README.md). The CI workflow at `.github/workflows/validate.yml` runs the adapter in `--stdout` mode on all 38 agents and fails the build if any agent fails to adapt — so a green CI is your guarantee that the cross-host contract still holds.
 
 ---
 

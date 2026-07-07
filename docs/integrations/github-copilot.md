@@ -2,7 +2,7 @@
 
 > Goal: use GitHub Copilot (VS Code Copilot Chat + Copilot cloud agent) with this repo's agents, path-specific instructions, skills, prompts, workflows, and MCP servers, and run the SDLC pipeline against the `.sdlc/` shared state.
 
-The repository is **already mostly Copilot-shaped**: it ships `.github/agents/`, `.github/instructions/`, `.github/prompts/`, `.github/skills/`, `.github/workflows/`, plus a Copilot-flavoured [MCP integration guide](../mcp-integration-guide.md). This guide ties those pieces together end-to-end.
+The repository is **Copilot-shaped by convention**: its `agents/*.agent.md`, `instructions/*.instructions.md`, and `skills/<name>/SKILL.md` sources are designed to be copied on demand into a target project's `.github/agents/`, `.github/instructions/`, `.github/prompts/`, and `.github/skills/`, alongside a Copilot-flavoured [MCP integration guide](../mcp-integration-guide.md). This guide ties those pieces together end-to-end.
 
 ---
 
@@ -13,8 +13,8 @@ The repository is **already mostly Copilot-shaped**: it ships `.github/agents/`,
 | Repo-wide rules | root README + a generated `.github/copilot-instructions.md` | loaded into every Copilot request in the repo |
 | Path-specific instructions | `instructions/*.instructions.md` (have `applyTo` frontmatter) | `.github/instructions/*.instructions.md` |
 | Agents / reusable chats | `agents/*.agent.md` | referenced by `AGENTS.md`; bodies used as custom chat mode prompts |
-| Reusable prompts | `.github/prompts/*.md` (_REPO has these) | reused as-is |
-| Skills | `skills/<name>/SKILL.md` (`.github/skills/` mirror) | referenced from `AGENTS.md` / `copilot-instructions.md` |
+| Reusable prompts | `*.prompt.md` (authored by `agents/PromptFileAuthor.agent.md`) | copy into `.github/prompts/` |
+| Skills | `skills/<name>/SKILL.md` | copy the ones you need into `.github/skills/`, or reference on demand |
 | Workflows | `workflows/*.workflow.md` | referenced from the orchestrator agent body / a prompt |
 | Shared state | `.sdlc/` (created at runtime) | read/written by every agent; nothing to wire |
 | MCP | `.github/mcp.json` (Copilot cloud agent) or VS Code `mcp.json` | tool surface for browser/GitHub/Playwright |
@@ -26,7 +26,7 @@ The repository is **already mostly Copilot-shaped**: it ships `.github/agents/`,
 - GitHub Copilot subscription; Copilot enabled in the repository's Settings → Code & automation → Copilot.
 - VS Code with the GitHub Copilot + Copilot Chat extensions, **or** the Copilot cloud agent on github.com.
 - This repository cloned and opened in VS Code as a workspace (or pushed to your GitHub fork and opened from github.com/copilot).
-- A **target project** where the SDLC team will work. You can either run Awesome-VibeCoder's assets from within the Awesome-VibeCoder repo itself (dogfood) or copy the `.github/` mirror into your target project's `.github/`.
+- A **target project** where the SDLC team will work. You can either run Awesome-VibeCoder's assets from within the Awesome-VibeCoder repo itself (dogfood) or copy the specific `agents/`, `instructions/`, and `skills/` files you need into your target project's `.github/`.
 
 ---
 
@@ -68,7 +68,7 @@ cp ~/src/Awesome-VibeCoder/instructions/a11y.instructions.md           .github/i
 # …add the languages/frameworks this project actually uses
 ```
 
-> The Awesome-VibeCoder repo **already mirrors** many instructions under `.github/instructions/` — when working inside the Awesome-VibeCoder repo itself, this step is already done; check `.github/instructions/`.
+> `.github/instructions/` is not pre-populated in this repo — copy the specific instruction files your project needs, as shown above.
 
 Adjust `applyTo` per file to match your project's structure. Copilot attaches the instructions to any request touching a matching file.
 
@@ -96,7 +96,7 @@ This repo's agent personas live in `agents/`. Each `agents/<name>.agent.md` is a
 
 When asked to perform an SDLC role, load the matching agent file and follow it. Coordinate via the `.sdlc/` shared state. The orchestrator (`agents/sdlc-orchestrator.agent.md`) decomposes a goal and dispatches roles; the workflows (`workflows/sdlc-sequential.workflow.md`, `workflows/sdlc-parallel.workflow.md`) define phase order.
 
-Reusable prompts: `.github/prompts/`. Reusable skills: `skills/<name>/SKILL.md` (mirrored to `.github/skills/`).
+Reusable prompts: copy into `.github/prompts/`. Reusable skills: `skills/<name>/SKILL.md`, copied on demand into `.github/skills/`.
 ```
 
 > Alternatively (or additionally) you can use a root `CLAUDE.md` / `GEMINI.md` — Copilot cloud agent accepts any of these. `AGENTS.md` is the cross-tool convention.
@@ -105,7 +105,7 @@ Reusable prompts: `.github/prompts/`. Reusable skills: `skills/<name>/SKILL.md` 
 
 ## Step 4 — Custom chat modes / prompts
 
-Copy the repo's `.github/prompts/` into the target project (if you are not already in the Awesome-VibeCoder repo). For per-role chat modes in VS Code, create `.github/chatmodes/<role>.chatmode.md` (VS Code Copilot chat modes support the `name`, `description`, `tools`, `instructions` fields). The chat mode body can pasteload a repo agent file:
+Copy the `*.prompt.md` files you need into the target project's `.github/prompts/` (if you are not already in the Awesome-VibeCoder repo). For per-role chat modes in VS Code, create `.github/chatmodes/<role>.chatmode.md` (VS Code Copilot chat modes support the `name`, `description`, `tools`, `instructions` fields). The chat mode body can pasteload a repo agent file:
 
 ```markdown
 ---
@@ -125,10 +125,9 @@ The repo's agents already declare the Copilot-style `tools` array (`vscode, exec
 
 The repo's skills are addressed by relative path in agent file bodies ("Always load `skills/sdlc-shared-memory/SKILL.md`"). For GitHub Copilot's discoverability:
 
-- The repo already mirrors skills under `.github/skills/`.
 - In the target project, either copy the skills you need into `.github/skills/`, or add an instruction line in `AGENTS.md` / `copilot-instructions.md` that names each skill and its trigger conditions, so Copilot loads it on demand.
 
-Because Copilot Chat/Copilot cloud agent's instruction budget is shared, prefer the on-demand pattern over embedding all 42 skills at once.
+Because Copilot Chat/Copilot cloud agent's instruction budget is shared, prefer the on-demand pattern over embedding all 47 skills at once.
 
 ---
 
@@ -217,7 +216,7 @@ For VS Code Copilot Chat, add `.vscode/mcp.json` with the same shape (VS Code's 
 | Secret not exposed | non-`COPILOT_MCP_` prefix | prefix the secret name; reference as `${{ secrets.COPILOT_MCP_* }}` |
 | Agent tools error | tool name not in the agent's `tools` list | add it to frontmatter `tools:` array |
 | MCP server `tools: ['*']` flagged | repo policy restricts tools | list specific tool names instead of `'*'` |
-| Too much context | 87 instructions + 42 skills loaded at once | use on-demand reference from `AGENTS.md`, not bulk paste |
+| Too much context | 107 instructions + 47 skills loaded at once | use on-demand reference from `AGENTS.md`, not bulk paste |
 
 ---
 

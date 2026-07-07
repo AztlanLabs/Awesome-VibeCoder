@@ -90,6 +90,34 @@
     "sdlc-handoff": {
       "description": "List pending handoffs in .sdlc/handoffs/ awaiting acknowledgement.",
       "prompt": "Read .sdlc/handoffs/_index.md. For each unacknowledged handoff, report the source role, target role, artifact paths, and the gate that produced it. Do not acknowledge on the user's behalf."
+    },
+    "/review": {
+      "description": "Review the current diff, PR, or staged change for code quality, SOLID, security, and the Definition of Done of the relevant role.",
+      "prompt": "Load ./agents/sdlc-code-reviewer.agent.md and follow it. Read the changed files (git diff against main), evaluate against the role's Definition of Done, and produce a structured review report. Cite file:line for every finding. Do not modify the code; produce review output only."
+    },
+    "/a11y": {
+      "description": "Audit the current page, component, or surface for WCAG 2.1 AA accessibility and produce a remediation report.",
+      "prompt": "Load ./agents/sdlc-accessibility-specialist.agent.md and follow it. Read the affected UI (component, route, or full app), run an accessibility audit, and produce a WCAG 2.1 AA remediation report with severity, file:line, and concrete fix suggestions. Cite the failing axe / Lighthouse / Pa11y command output."
+    },
+    "/explain": {
+      "description": "Explain a code section, module, or behavior in plain language with a focus on the 'why' and the surrounding architecture.",
+      "prompt": "Load ./agents/context-researcher.agent.md and follow it. Investigate the requested code area, produce an evidence-backed explanation: what it does, why it exists, how it fits into .sdlc/architecture.md, and which contracts it depends on. Cite file:line for every claim."
+    },
+    "/implement": {
+      "description": "Implement a feature end-to-end against the API contract and the architecture, with tests.",
+      "prompt": "Load ./agents/sdlc-orchestrator.agent.md, ./agents/sdlc-developer.agent.md (or the relevant specialist — backend / frontend / fullstack), and follow them. Read .sdlc/architecture.md, .sdlc/contracts/api-contracts.md, and the relevant task. Implement the change in the real source tree, run the project's build + tests, and cite the command + result in .sdlc/progress.md."
+    },
+    "/test": {
+      "description": "Write or extend the test suite for the current change, enforce quality gates, and report coverage.",
+      "prompt": "Load ./agents/sdlc-qa-tester.agent.md and follow it. Read the change under review, write the missing unit / integration / E2E tests, run the full relevant suite, and report coverage. Cite the command + pass/fail counts in .sdlc/progress.md."
+    },
+    "/rfc": {
+      "description": "Draft an Architecture Decision Record (ADR) / RFC for the proposed change, with context, options, trade-offs, and a decision.",
+      "prompt": "Load ./agents/sdlc-software-architect.agent.md and follow it. Produce an ADR at .sdlc/decisions/ADR-<slug>.md with: title, status, context, options considered, trade-offs, decision, and consequences. Update .sdlc/decisions/_index.md. Cite every source you reference."
+    },
+    "/pr": {
+      "description": "Open a pull request for the current branch with a structured title, description, and checklist; report the PR URL.",
+      "prompt": "Load ./agents/sdlc-devops-engineer.agent.md and follow it. Verify the branch is ready (tests green, lint clean, docs updated), push the branch, and open a PR with a title that follows the project's commit convention, a description that summarizes the change and links the relevant task / ADR, and a Definition-of-Done checklist. Report the PR URL back to the user."
     }
   },
   "agent": {
@@ -129,7 +157,7 @@
       "mode": "subagent",
       "description": "API design, service implementation, data access, integration patterns, observability. Use when implementing APIs or services.",
       "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
-      "prompt": "Load ./agents/sdlc-backend-engineer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-backend-engineer. Write API contracts to .sdlc/contracts/api-contracts.md BEFORE implementing endpoints in the real source tree; run build + integration tests and cite the result in .sdlc/progress.md."
+      "prompt": "Load ./agents/sdlc-backend-engineer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-backend-engineer. Read .sdlc/contracts/api-contracts.md (owned by sdlc-api-designer) and implement endpoints against it — do not write the contract; run build + integration tests and cite the result in .sdlc/progress.md."
     },
     "sdlc-fullstack-engineer": {
       "mode": "subagent",
@@ -145,7 +173,17 @@
         "bash": "ask",
         "task": "allow"
       },
-      "prompt": "Load ./agents/sdlc-ux-ui-designer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-ux-ui-designer, skills/web-design-system. Write journeys/flows/a11y-requirements/design-tokens to docs/ux/. Hand off specs to sdlc-frontend-engineer."
+      "prompt": "Load ./agents/sdlc-ux-ui-designer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-ux-ui-designer, skills/web-design-system. Write journeys/flows/design-tokens to docs/ux/. Hand off specs to sdlc-frontend-engineer."
+    },
+    "sdlc-accessibility-specialist": {
+      "mode": "subagent",
+      "description": "WCAG 2.2 AA/AAA audits, accessibility-first design review, structured remediation reports, a11y requirements ownership. Use for WCAG audits and a11y contract ownership.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/sdlc-accessibility-specialist.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/web-accessibility-audit. Write a11y requirements to .sdlc/contracts/a11y-requirements.md and remediation reports to docs/a11y/; hand off findings to sdlc-frontend-engineer, sdlc-ux-ui-designer, and sdlc-qa-tester."
     },
     "sdlc-db-architect": {
       "mode": "subagent",
@@ -156,6 +194,16 @@
         "task": "allow"
       },
       "prompt": "Load ./agents/sdlc-db-architect.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-db-architect. Write the schema contract to .sdlc/contracts/db-schema.md, ERD to .sdlc/decisions/, and migration strategy to .sdlc/architecture.md."
+    },
+    "sdlc-api-designer": {
+      "mode": "subagent",
+      "description": "API-first design, OpenAPI 3.1 contracts, REST/GraphQL/gRPC style guidance, versioning, idempotency, pagination, error taxonomy. Use when designing the API contract.",
+      "permission": {
+        "edit": { "*": "deny", ".sdlc/**": "allow", "docs/**": "allow" },
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/sdlc-api-designer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory. Own .sdlc/contracts/api-contracts.md — design OpenAPI 3.1 specs, versioning, error envelopes, pagination, and idempotency before implementation; hand off to sdlc-backend-engineer (implement against contract), sdlc-frontend-engineer (consume), and sdlc-qa-tester (test against)."
     },
     "sdlc-db-developer": {
       "mode": "subagent",
@@ -184,6 +232,16 @@
       "description": "Test strategy (pyramid), automation (unit/integration/e2e), coverage, quality gates, flakiness quarantine. Use when writing tests or enforcing quality gates.",
       "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
       "prompt": "Load ./agents/sdlc-qa-tester.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-qa-tester. Write tests to the real source tree; run the full suite and cite pass/fail/coverage numbers from a real run in .sdlc/progress.md; quarantine flaky tests and open follow-ups."
+    },
+    "sdlc-code-reviewer": {
+      "mode": "subagent",
+      "description": "Structured code review against SOLID, security, performance, and architecture standards. Use for PR review and code quality audits; read-only, never edits product code.",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask",
+        "task": "allow"
+      },
+      "prompt": "Load ./agents/sdlc-code-reviewer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory; load instructions/code-review-generic.instructions.md. Emit structured findings to .sdlc/decisions/review-*.md triaged by severity (CRITICAL/IMPORTANT/SUGGESTION); create handoffs to implementation roles with actionable recommendations. Read-only — never edit product source code."
     },
     "sdlc-devops-engineer": {
       "mode": "subagent",

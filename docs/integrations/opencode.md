@@ -16,7 +16,7 @@ This guide is **self-contained**. opencode validates config strictly and refuses
 | Workflows | `workflows/*.workflow.md` | referenced from `command:` slash-commands or the orchestrator agent |
 | Shared state | `.sdlc/` (created at runtime) | read/written by every agent; nothing to wire |
 
-> **Shortcut:** the repo ships a fully-populated, ready-to-paste [`docs/opencode.json`](../opencode.json) that already wires **all 35 agents**, the `./skills` path, curated instructions, `/sdlc-*` slash commands, and the Playwright + GitHub MCP servers. To use it: copy that file to the repo root (or into your target project and adjust the relative paths), then start opencode. The steps below explain each block so you can trim or extend it.
+> **Shortcut:** the repo ships a fully-populated, ready-to-paste [`docs/opencode.json`](../opencode.json) that already wires **all 38 agents**, the `./skills` path, curated instructions, `/sdlc-*` slash commands, and the Playwright + GitHub MCP servers. To use it: copy that file to the repo root (or into your target project and adjust the relative paths), then start opencode. The steps below explain each block so you can trim or extend it.
 
 ---
 
@@ -70,7 +70,7 @@ Replace `../Awesome-VibeCoder` with the actual relative or absolute path to your
 
 ## Step 2 — Link skills (zero-copy)
 
-The `skills.paths` array tells opencode where to scan for `**/SKILL.md` files. With the Awesome-VibeCoder path listed, **all 42 skills** (incl. all 17 `sdlc-*` skills) become available to the Skill tool automatically. No copying, no per-skill wiring.
+The `skills.paths` array tells opencode where to scan for `**/SKILL.md` files. With the Awesome-VibeCoder path listed, **all 47 skills** (incl. all 17 `sdlc-*` skills) become available to the Skill tool automatically. No copying, no per-skill wiring.
 
 Verify after restart:
 
@@ -138,7 +138,7 @@ Because Option 1 requires no per-agent conversion, prefer it unless you want the
 
 ## Step 4 — Link instructions
 
-opencode loads the strings in `instructions:` as additional context. Listing **all 87 instruction files** bloats context — pick the ones the current project uses:
+opencode loads the strings in `instructions:` as additional context. Listing **all 107 instruction files** bloats context — pick the ones the current project uses:
 
 ```json
 "instructions": [
@@ -155,7 +155,9 @@ A pragmatic pattern is to write a target-project `AGENTS.md` that names the rele
 
 ## Step 5 — Link workflows as slash commands
 
-The repository ships two workflow blueprints. Map them to opencode slash commands:
+The repository ships workflow blueprints and a set of role-targeted slash commands. Map them to opencode slash commands:
+
+### Workflow commands
 
 ```json
 "command": {
@@ -166,11 +168,35 @@ The repository ships two workflow blueprints. Map them to opencode slash command
   "sdlc-parallel": {
     "description": "Run the SDLC parallel workflow.",
     "prompt": "Load ../Awesome-VibeCoder/workflows/sdlc-parallel.workflow.md and execute its phases with dependency gates against .sdlc/."
+  },
+  "sdlc-bug-triage": {
+    "description": "Run the bug-triage workflow on a reported bug.",
+    "prompt": "Load ../Awesome-VibeCoder/workflows/bug-triage.workflow.md and execute it. Confirm the bug task in .sdlc/tasks/ has a Root Cause section, run the failing → passing test transition, and ship via the DevOps Engineer step."
+  },
+  "sdlc-docs-regen": {
+    "description": "Regenerate the project's user-facing docs from the API contract with a path audit and Responsible AI review.",
+    "prompt": "Load ../Awesome-VibeCoder/workflows/docs-regen.workflow.md and execute it: Technical Writer regenerates the affected docs; RepositoryPathAuditor audits paths; Responsible AI signs off on bias / privacy / accessibility."
   }
 }
 ```
 
-Invoke with `/sdlc-sequential` or `/sdlc-parallel` from the opencode prompt.
+Invoke with `/sdlc-sequential`, `/sdlc-parallel`, `/sdlc-bug-triage`, or `/sdlc-docs-regen` from the opencode prompt.
+
+### Role-targeted commands
+
+The repo also ships seven role-targeted slash commands that map directly to a single agent. They are wired in `docs/opencode.json` under `command:` and are listed here for discoverability:
+
+| Slash command | Loads | Purpose |
+| --- | --- | --- |
+| `/review` | `sdlc-code-reviewer` | Review a diff, PR, or staged change for code quality, SOLID, and security |
+| `/a11y` | `sdlc-accessibility-specialist` | Audit the current page or component for WCAG 2.1 AA and produce a remediation report |
+| `/explain` | `context-researcher` | Explain a code section in plain language with file:line evidence |
+| `/implement` | `sdlc-orchestrator` + relevant specialist | Implement a feature end-to-end against the API contract, with tests |
+| `/test` | `sdlc-qa-tester` | Write or extend the test suite, enforce quality gates, report coverage |
+| `/rfc` | `sdlc-software-architect` | Draft an ADR / RFC with context, options, trade-offs, and a decision |
+| `/pr` | `sdlc-devops-engineer` | Open a pull request with a structured title, description, and Definition-of-Done checklist |
+
+Invoke any of these directly from the opencode prompt; the agent is dispatched with the relevant context.
 
 ---
 

@@ -41,6 +41,7 @@ When a user says "initialize sdlc workspace", "create sdlc state", or equivalent
 │   └── _index.md
 ├── contracts/
 │   ├── api-contracts.md
+│   ├── a11y-requirements.md
 │   ├── db-schema.md
 │   ├── security-requirements.md
 │   └── test-strategy.md
@@ -292,7 +293,8 @@ Contracts are shared agreements between roles. Each contract file has a designat
 
 | Contract | Owner | Consumers |
 |---|---|---|
-| `api-contracts.md` | Backend Engineer | Frontend, Full Stack, QA |
+| `api-contracts.md` | API Designer | Backend, Frontend, Full Stack, QA |
+| `a11y-requirements.md` | Accessibility Specialist | Frontend, UX/UI, QA |
 | `db-schema.md` | DB Architect | DB Developer, Backend |
 | `security-requirements.md` | Cybersecurity Architect | All roles |
 | `test-strategy.md` | QA Tester | All roles |

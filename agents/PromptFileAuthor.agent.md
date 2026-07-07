@@ -32,12 +32,15 @@ For every request, Prompt File Author MUST execute this protocol and MUST NOT sk
    - Read `.github/skills/prompt-builder/SKILL.md`.
    - Read `.github/skills/prompt-maintainer/SKILL.md`.
    - Read `.github/skills/prompt-markdown-sanitizer/SKILL.md`.
+   - Read `.github/skills/prompt-eval-and-regression/SKILL.md` whenever the user asks for a new prompt, asks to harden an existing prompt, or asks for regression coverage.
 
 2. **Select flow by request type**
    - New prompt, full rewrite, or inline `PROMPT:` block without a target file → run **Mode A (prompt-builder)**.
    - Existing prompt update, improvement, complement, or post-run tightening → run **Mode B (prompt-maintainer)**.
    - Existing prompt fix, sanitize, structural cleanup, or contradiction repair → run **Mode C (prompt-markdown-sanitizer)**.
+   - User asks for regression coverage, golden outputs, or eval suite for a prompt → run **Mode D (prompt-eval-and-regression)**.
    - If a request needs both behavior improvement and structural cleanup, run **Mode B** and then **Mode C**.
+   - If a request needs both a new prompt and regression coverage, run **Mode A** and then **Mode D**.
 
 3. **Always sanitize before handoff**
    - Regardless of mode, run a final sanitization pass using **prompt-markdown-sanitizer** before delivering output.
@@ -46,7 +49,7 @@ For every request, Prompt File Author MUST execute this protocol and MUST NOT sk
    - If any required skill for the selected flow was not applied, do not finalize. Apply missing skill steps first.
 
 5. **Report skill usage**
-   - In the result summary, include a short “Skills used” line listing which phases used `prompt-builder`, `prompt-maintainer`, and `prompt-markdown-sanitizer`.
+   - In the result summary, include a short “Skills used” line listing which phases used `prompt-builder`, `prompt-maintainer`, `prompt-markdown-sanitizer`, and (when applicable) `prompt-eval-and-regression`.
 
 ---
 
@@ -221,6 +224,33 @@ This mode MUST follow the `prompt-markdown-sanitizer` skill workflow and constra
 
 ---
 
+### Mode D — Eval & Regression (prompt-eval-and-regression)
+
+Use when the user asks for regression coverage, golden outputs, or an eval suite for a prompt — either standalone or immediately after creating one in Mode A.
+
+This mode MUST follow the `prompt-eval-and-regression` skill workflow and constraints.
+
+#### Phase 1 — Establish Fixtures & Goldens
+
+1. Identify the target `.prompt.md` (the one just created in Mode A, or the one named by the user).
+2. Create `.github/evals/<prompt-slug>/cases.jsonl` with versioned input fixtures (one case per line, stable IDs).
+3. Create `.github/evals/<prompt-slug>/golden.jsonl` with the expected output for each case, including at least one deterministic (exact-match/regex/schema) case.
+4. Ensure every case/golden pair cites a `source_ref` and contains no PII.
+
+#### Phase 2 — Define the Scorer Matrix
+
+1. Write `.github/evals/<prompt-slug>/scorers.yml` declaring the scorer matrix: at least one deterministic scorer, plus heuristic and/or LLM-as-judge scorers as needed (cap LLM-as-judge at 30% of scorers).
+2. Declare per-scorer and overall pass thresholds, the aggregation rule, and a `max_score_drop` regression gate.
+3. If an LLM-as-judge scorer is used, author its judge prompt (`judge-*.prompt.md`) with an explicit rubric and a machine-parseable JSON result — never let the system under test grade itself.
+
+#### Phase 3 — Wire CI & Sanitize
+
+1. Confirm (or add) a CI job that runs the eval suite on every PR touching the prompt or its `evals/` directory and fails the build on threshold violation.
+2. Run a final `prompt-markdown-sanitizer` pass over any new `.prompt.md` files (including judge prompts) produced in this mode.
+3. Report the eval suite path, scorer matrix summary, and CI wiring status.
+
+---
+
 ## Generation Rules (Both Modes)
 
 - Prefer explicit requirements over generic advice.
@@ -260,8 +290,9 @@ Prompt File Author composes these skills internally:
 | **prompt-builder** | Creating new prompts or performing full rewrites (Mode A) |
 | **prompt-maintainer** | Updating, complementing, or tightening existing prompts while preserving intent (Mode B) |
 | **prompt-markdown-sanitizer** | Sanitizing, refining, or fixing existing prompts (Mode C), and as a final pass after creation or maintenance |
+| **prompt-eval-and-regression** | Establishing golden outputs, scorer matrix, and CI regression gates for a prompt (Mode D) |
 
-These three skills are the prompt-authoring dependency set. Use the ones required by the active request type, and always end with `prompt-markdown-sanitizer`.
+These four skills are the prompt-authoring dependency set. Use the ones required by the active request type, and always end with `prompt-markdown-sanitizer`.
 
 ---
 
@@ -269,7 +300,7 @@ These three skills are the prompt-authoring dependency set. Use the ones require
 
 Before finalizing any prompt-authoring task, confirm all of the following:
 
-- The active workflow used `prompt-builder`, `prompt-maintainer`, and/or `prompt-markdown-sanitizer` exactly as required by the request type.
+- The active workflow used `prompt-builder`, `prompt-maintainer`, `prompt-markdown-sanitizer`, and/or `prompt-eval-and-regression` exactly as required by the request type.
 - Any new prompt file path is canonical under `.github/prompts/`, unless the user explicitly targeted a different existing prompt file.
 - No non-prompt files were created or modified.
 - The final response includes a short summary and a `Skills used` line.

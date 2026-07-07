@@ -28,9 +28,9 @@
 
 **Awesome-VibeCoder** is a curated, open-source directory of customization assets for AI coding tools (such as GitHub Copilot and Cursor). It enables developers to implement structured, role-based workflows for software engineering. Rather than relying on simple, single-prompt instructions, Awesome-VibeCoder provides:
 
-*   **35+ Specialized Agents** (`.agent.md`): Structured personas for roles ranging from Database Architects to DevOps Engineers, plus dedicated web design-system and performance engineers.
-*   **87+ Modular System Instructions** (`.instructions.md`): Deep domain-specific rules (languages, frameworks, secure coding patterns).
-*   **42+ Task-Focused Skills** (`SKILL.md`): Reusable execution guides for planning, refactoring, context-mapping, interface evaluation, design systems, accessibility audits, and performance budgets.
+*   **38+ Specialized Agents** (`.agent.md`): Structured personas for roles ranging from Database Architects to DevOps Engineers, plus dedicated web design-system and performance engineers.
+*   **107+ Modular System Instructions** (`.instructions.md`): Deep domain-specific rules (languages, frameworks, secure coding patterns).
+*   **47+ Task-Focused Skills** (`SKILL.md`): Reusable execution guides for planning, refactoring, context-mapping, interface evaluation, design systems, accessibility audits, and performance budgets.
 *   **Structured Workflows** (`.workflow.md`): Execution blueprints to orchestrate parallel or sequential multi-agent activities.
 
 ---
@@ -41,10 +41,11 @@ Below is a breakdown of the repository's core directories and their correspondin
 
 | Directory | Description | Documentation |
 | :--- | :--- | :--- |
-| [`/agents`](agents/) | 35+ custom agent profiles defining role identities, system instructions, and task domains. | [Agents Catalog](docs/README.agents.md) |
-| [`/instructions`](instructions/) | 87+ markdown guides detailing styling, language features, security (OWASP), and CI/CD. | [Instructions Library](docs/README.instructions.md) |
-| [`/skills`](skills/) | 42+ self-contained skill packages containing runbooks and markdown templates. | [Skills Catalog](docs/README.skills.md) |
+| [`/agents`](agents/) | 38+ custom agent profiles defining role identities, system instructions, and task domains. | [Agents Catalog](docs/README.agents.md) |
+| [`/instructions`](instructions/) | 107+ markdown guides detailing styling, language features, security (OWASP), and CI/CD. | [Instructions Library](docs/README.instructions.md) |
+| [`/skills`](skills/) | 47+ self-contained skill packages containing runbooks and markdown templates. | [Skills Catalog](docs/README.skills.md) |
 | [`/workflows`](workflows/) | Sequence maps and concurrency stages to run agent chains in parallel or series. | [Workflows Catalog](docs/README.workflows.md) |
+| [`/templates`](templates/) | Copy-paste starters for ADRs, tasks, handoffs, prompts, MCP configs, and the `.sdlc/` skeleton. | - |
 | [`/docs`](docs/) | Complete documentation, guides, and integration materials (e.g. MCP guidelines). | [Documentation Portal](docs/README.sdlc-system.md) |
 | [`/cookbook`](cookbook/) | Runnable recipes for the Copilot SDK and the modern web stack (Node.js, React, Next.js, Astro, Svelte, Vue). | [Cookbook Index](cookbook/README.md) |
 | [`/.github`](.github/) | Mirrors of active assets, prompt layouts, and customization configurations. | - |
@@ -53,7 +54,7 @@ Below is a breakdown of the repository's core directories and their correspondin
 
 ## 🤖 The Always-On SDLC Multi-Agent System
 
-The centerpiece of this repository is the **Modular SDLC System**, which defines a set of **16 specialized roles** that cooperate using an **Always-On Centralized State Architecture**. 
+The centerpiece of this repository is the **Modular SDLC System**, which defines a set of **38 specialized roles** that cooperate using an **Always-On Centralized State Architecture**. 
 
 Instead of agents operating in isolation, they read and write to a centralized `.sdlc/` directory at the project root. This file-based state plane holds project requirements, architecture specifications, API contracts, active context, and progress logs.
 
@@ -84,7 +85,12 @@ When executing, team agents interact through structured markdown documents:
 ├── systemPatterns.md           # Conventions and coding standards
 ├── tasks/                       # Task files with lifecycle tracking
 ├── decisions/                   # Architecture Decision Records (ADRs)
-├── contracts/                   # Cross-role agreements (API, DB schemas, security)
+├── contracts/                   # Cross-role agreements (API, a11y, DB schemas, security, test strategy)
+│   ├── api-contracts.md         # owned by API Designer
+│   ├── a11y-requirements.md     # owned by Accessibility Specialist
+│   ├── db-schema.md             # owned by DB Architect / Developer
+│   ├── security-requirements.md # owned by Cybersecurity Architect
+│   └── test-strategy.md         # owned by QA Tester
 ├── handoffs/                    # Agent-to-agent task transfer handoffs
 └── memory.md                    # Cross-session memory and lessons learned
 ```
@@ -123,8 +129,10 @@ To explore the deeper technical details of the ecosystem, refer to the guides be
 *   **[System Instructions](docs/README.instructions.md)**: Guide to language conventions, framework configurations, and security guardrails.
 *   **[Skills & Runbooks](docs/README.skills.md)**: Overview of foldered skills, trigger conditions, and implementation templates.
 *   **[Multi-Agent Workflows](docs/README.workflows.md)**: Sequential vs parallel configurations and orchestration rules.
-*   **[Integration Guides](docs/integrations/README.md)**: How to link agents, skills, instructions, workflows, and MCP into **opencode**, **Claude Code**, **GitHub Copilot**, **Cursor**, and **Antigravity** — one step-by-step guide per host. Includes a [ready-to-paste `docs/opencode.json`](docs/opencode.json) wiring all 35 agents, a [cross-host compatibility analysis](docs/integrations/compatibility.md), and the [`scripts/agent-frontmatter-adapter.py`](scripts/agent-frontmatter-adapter.py) translator so the same `.agent.md` works across all four hosts.
+*   **[Integration Guides](docs/integrations/README.md)**: How to link agents, skills, instructions, workflows, and MCP into **opencode**, **Claude Code**, **GitHub Copilot**, **Cursor**, and **Antigravity** — one step-by-step guide per host. Includes a [ready-to-paste `docs/opencode.json`](docs/opencode.json) wiring all 38 agents, a [cross-host compatibility analysis](docs/integrations/compatibility.md), and the [`scripts/agent-frontmatter-adapter.py`](scripts/agent-frontmatter-adapter.py) translator so the same `.agent.md` works across all four hosts.
 *   **[MCP Integration Guide](docs/mcp-integration-guide.md)**: Configuring Model Context Protocol tools for backend and frontend agent workflows.
+*   **[Changelog](CHANGELOG.md)**: Notable changes to Awesome-VibeCoder, in [Keep a Changelog](https://keepachangelog.com/) format.
+*   **[`llms.txt`](llms.txt) / [`llms-full.txt`](llms-full.txt)**: Machine-readable indexes listing every agent, skill, instruction, and workflow with a one-line description, for LLM tools that auto-discover a repo's `llms.txt`.
 
 ---
 

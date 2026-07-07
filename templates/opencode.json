@@ -1,0 +1,49 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "username": "<your-username>",
+  "logLevel": "INFO",
+  "share": "manual",
+  "autoupdate": "notify",
+  "snapshot": true,
+  "default_agent": "sdlc-orchestrator",
+  "instructions": [
+    "./instructions/prompt.instructions.md",
+    "./instructions/security-and-owasp.instructions.md",
+    "./instructions/a11y.instructions.md"
+  ],
+  "skills": {
+    "paths": [
+      "./skills"
+    ]
+  },
+  "command": {
+    "sdlc-init": {
+      "description": "Scaffold .sdlc/ shared state and decompose a goal into role-assigned tasks.",
+      "prompt": "Load ./agents/sdlc-orchestrator.agent.md and execute its workspace initialization + goal decomposition workflow. Create .sdlc/ if missing; write tasks to .sdlc/tasks/ with acceptance criteria, role, and dependencies; update .sdlc/tasks/_index.md."
+    },
+    "sdlc-status": {
+      "description": "Read .sdlc/progress.md and report task status, blocked items, and pending handoffs.",
+      "prompt": "Read .sdlc/progress.md, .sdlc/tasks/_index.md, and .sdlc/handoffs/_index.md. Report: completed tasks (with their cited command+result), in-flight tasks, blocked tasks (with the blocker), and unacknowledged handoffs. Do not advance phases."
+    }
+  },
+  "agent": {
+    "sdlc-orchestrator": {
+      "mode": "primary",
+      "description": "Workspace initialization, goal decomposition, and multi-agent coordination. Use to set up .sdlc/ and dispatch role agents.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-orchestrator.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory. Scaffold .sdlc/ if missing; decompose the goal into role-assigned tasks; dispatch subagents; gate phase advancement on real command+result evidence in .sdlc/progress.md."
+    },
+    "sdlc-developer": {
+      "mode": "subagent",
+      "description": "General implementation — SOLID clean code, refactoring, debugging. Use when no specialist role fits.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-developer.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-developer. Implement in the real source tree; run build + tests; cite the command + result in .sdlc/progress.md."
+    },
+    "sdlc-qa-tester": {
+      "mode": "subagent",
+      "description": "Automated tests (unit/integration/E2E) and quality gates. Use for writing or enforcing tests.",
+      "permission": { "edit": "allow", "bash": "ask", "task": "allow" },
+      "prompt": "Load ./agents/sdlc-qa-tester.agent.md and follow it. Mandatory skills: skills/sdlc-shared-memory, skills/sdlc-qa-tester. Write tests to the real source tree; run the full suite and cite pass/fail/coverage numbers in .sdlc/progress.md."
+    }
+  }
+}

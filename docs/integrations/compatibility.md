@@ -2,7 +2,7 @@
 
 > Are the repo's agents and skills ready for Claude Code? And how do we make the **same `.agent.md`/`SKILL.md` files work in opencode, Claude Code, GitHub Copilot, and Cursor without per-host rewrites?
 
-This is the analysis + the protocol. For installation steps per host, see the [host guides](README.md). For the ready-to-paste opencode config, see [`docs/opencode.json`](../../opencode.json).
+This is the analysis + the protocol. For installation steps per host, see the [host guides](README.md). For the ready-to-paste opencode config, see [`docs/opencode.json`](../opencode.json).
 
 ---
 
@@ -10,8 +10,8 @@ This is the analysis + the protocol. For installation steps per host, see the [h
 
 | Asset class | Claude Code ready? | opencode ready? | Copilot ready? | Cursor ready? |
 | --- | --- | --- | --- | --- |
-| **`SKILL.md` skills** (42) | ✅ as-is (Claude scans `**/SKILL.md`, requires `name`+`description` — repo has both) | ✅ as-is (opencode scans `**/SKILL.md`, same frontmatter) | ✅ as-is (referenced from `AGENTS.md`/`copilot-instructions.md`) | ✅ via `.mdc` wrapper that points at the skill |
-| **`.agent.md` agents** (35) | ⚠️ mostly (frontmatter `name`+`description` load; Claude's `tools`/`permissionMode`/`skills`/`mcpServers` are *not* set) | ⚠️ via config translation (opencode uses filename identity + `permission`, not `tools`) | ✅ as-is (Copilot-style frontmatter was the authoring target) | ⚠️ via `.mdc` wrapper (`description`+`globs`) |
+| **`SKILL.md` skills** (47) | ✅ as-is (Claude scans `**/SKILL.md`, requires `name`+`description` — repo has both) | ✅ as-is (opencode scans `**/SKILL.md`, same frontmatter) | ✅ as-is (referenced from `AGENTS.md`/`copilot-instructions.md`) | ✅ via `.mdc` wrapper that points at the skill |
+| **`.agent.md` agents** (38) | ⚠️ mostly (frontmatter `name`+`description` load; Claude's `tools`/`permissionMode`/`skills`/`mcpServers` are *not* set) | ⚠️ via config translation (opencode uses filename identity + `permission`, not `tools`) | ✅ as-is (Copilot-style frontmatter was the authoring target) | ⚠️ via `.mdc` wrapper (`description`+`globs`) |
 
 **One sentence:** the skills are already cross-host portable; the agents are portable in *their system prompt* but need per-host frontmatter translation — that translation is mechanical and fully automated by [`scripts/agent-frontmatter-adapter.py`](../../scripts/agent-frontmatter-adapter.py).
 
@@ -156,7 +156,7 @@ For each `agents/sdlc-*.agent.md` and `agents/web-*.agent.md`:
 
 For each implementation role, the Claude `tools:` list should be `[Read, Edit, Write, Bash, Grep, Glob, WebFetch, WebSearch, Skill, Agent]`; for read-only roles `[Read, Grep, Glob, WebFetch, Skill, Agent]` plus `permissionMode: plan`.
 
-> Choosing to backport into source is a **team policy** call — see `docs/opencode.json` for the **fully-populated, ready-to-paste** opencode version that already encodes every decision (35 agents, 5 commands, 10 instructions, 2 MCP servers, `sdlc-orchestrator` as default agent, per-role permissions). For Claude Code/Cursor, run the adapter.
+> Choosing to backport into source is a **team policy** call — see `docs/opencode.json` for the **fully-populated, ready-to-paste** opencode version that already encodes every decision (38 agents, 12 commands, 10 instructions, 2 MCP servers, `sdlc-orchestrator` as default agent, per-role permissions). For Claude Code/Cursor, run the adapter.
 
 ---
 
@@ -231,7 +231,7 @@ This is encoded in `docs/opencode.json`'s `description` fields so the host surfa
 
 ## See also
 
-- Ready-to-paste opencode config: [`docs/opencode.json`](../../opencode.json)
+- Ready-to-paste opencode config: [`docs/opencode.json`](../opencode.json)
 - Per-host install guides: [opencode](opencode.md) · [Claude Code](claude-code.md) · [GitHub Copilot](github-copilot.md) · [Cursor](cursor.md)
 - Adapter script: [`scripts/agent-frontmatter-adapter.py`](../../scripts/agent-frontmatter-adapter.py)
 - Legacy Copilot-flavoured MCP reference: [`docs/mcp-integration-guide.md`](../mcp-integration-guide.md)

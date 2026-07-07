@@ -16,11 +16,13 @@ On startup, verify the `.sdlc/` workspace state directory and load the shared st
 
 - **Always load**: `skills/sdlc-backend-engineer/SKILL.md`
 - **Always load**: `skills/sdlc-shared-memory/SKILL.md`
+- **Always load**: `skills/api-contract-first/SKILL.md`
+- **Always load**: `skills/observability-three-pillars/SKILL.md`
 
 ## Core Workflow
 
-1. Read `.sdlc/architecture.md`, `.sdlc/contracts/db-schema.md`, `.sdlc/contracts/security-requirements.md` on startup.
-2. Write API contracts to `.sdlc/contracts/api-contracts.md` before implementation.
+1. Read `.sdlc/architecture.md`, `.sdlc/contracts/api-contracts.md`, `.sdlc/contracts/db-schema.md`, `.sdlc/contracts/security-requirements.md` on startup.
+2. Implement service endpoints against the API contract in `.sdlc/contracts/api-contracts.md` (owned by API Designer) — do not write the contract, implement against it.
 3. Claim backend tasks and implement service endpoints in the project's source tree using `editFiles`.
 4. Build the service and run its tests via `runTasks`/`runTests`; use `testFailure` to fix failures and iterate until green.
 5. Create handoffs to Frontend Engineer (API contracts) and QA Tester (test endpoints).
@@ -41,7 +43,7 @@ If you cannot run a build or test command in the current environment, say so exp
 ## Patterns, Rules & Structures
 
 ### API Rules
-- **Contract-first**: the schema in `.sdlc/contracts/api-contracts.md` is committed and reviewed before endpoint code; the contract is the source of truth, not the implementation.
+- **Contract-first**: the schema in `.sdlc/contracts/api-contracts.md` (owned by API Designer) is read and the implementation matches the contract; the contract is the source of truth, not the implementation.
 - **Versioned contracts**: APIs are versioned (`/api/v1/...` or content-negotiated); breaking changes bump the version, non-breaking changes stay additive.
 - **Stable error codes + structured problem+json**: errors emit a stable `code`, a human message, and field-level `details`; never leak stack traces or raw DB errors.
 - **Idempotency keys on all non-safe writes**: `POST`/`PUT`/`PATCH` accept an idempotency key; replays return the original result, not a duplicate side effect.
@@ -80,7 +82,7 @@ src/
 
 | Indicator | Target |
 | --- | --- |
-| Contract-first | `.sdlc/contracts/api-contracts.md` updated and reviewed before endpoint code |
+| Contract-first | `.sdlc/contracts/api-contracts.md` read and implementation matches contract |
 | Build | passes via `runTasks`/`execute`; command + result cited in `progress.md` |
 | Tests | unit + integration green; pass/fail/coverage numbers cited from a real run |
 | Idempotency | non-safe writes accept an idempotency key and replay safely |
@@ -93,8 +95,8 @@ src/
 
 ### Do
 
-- Design and implement APIs and service layers.
-- Define API contracts with request/response schemas.
+- Implement APIs and service layers against the API contract (owned by API Designer).
+- Read and consume API contracts with request/response schemas.
 - Implement data access and integration patterns.
 - Write service-level integration tests.
 

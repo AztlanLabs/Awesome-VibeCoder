@@ -42,7 +42,7 @@ mkdir -p .claude
 ln -s ~/src/Awesome-VibeCoder/skills .claude/skills
 ```
 
-After restart, all 42 skills (`sdlc-shared-memory`, `web-design-system`, `web-performance-budget`, …) are discoverable by the Skill tool.
+After restart, all 47 skills (`sdlc-shared-memory`, `web-design-system`, `web-performance-budget`, …) are discoverable by the Skill tool.
 
 ### Option B — point skills at the repo with a preload list
 
@@ -159,7 +159,7 @@ When working on a file, fetch the matching instruction first (Read tool) and fol
 
 Drop `CLAUDE.md` files into `apps/web/CLAUDE.md`, `apps/api/CLAUDE.md`, etc. Each points at the relevant instruction file from Awesome-VibeCoder. Claude Code walks up from the cwd and loads every ancestor `CLAUDE.md`, so per-area rules reach only the agents working in that area.
 
-> Avoid pasting all 87 instruction files into `CLAUDE.md` — context budget. One `@`-reference per active domain is the right size.
+> Avoid pasting all 107 instruction files into `CLAUDE.md` — context budget. One `@`-reference per active domain is the right size.
 
 ---
 

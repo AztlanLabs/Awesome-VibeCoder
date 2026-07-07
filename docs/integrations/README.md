@@ -16,9 +16,10 @@ A cross-host MCP reference lives in the older [MCP Integration Guide](../mcp-int
 
 ## Ready-to-paste config & cross-host compatibility
 
-- **[`docs/opencode.json`](../../opencode.json)** — fully populated opencode config: all **35 agents** wired as inline `agent:` entries with per-role `mode`/`permission`, `skills.paths` pointing at `./skills` (zero-copy, all 42 skills auto-load), curated `instructions:`, `command:` slash-commands for `/sdlc-init`, `/sdlc-sequential`, `/sdlc-parallel`, `/sdlc-status`, `/sdlc-handoff`, `mcp:` for Playwright + GitHub, and `default_agent: sdlc-orchestrator`. Drop it at the repo root (or copy into a target project and adjust paths).
+- **[`docs/opencode.json`](../opencode.json)** — fully populated opencode config: all **38 agents** wired as inline `agent:` entries with per-role `mode`/`permission`, `skills.paths` pointing at `./skills` (zero-copy, all 47 skills auto-load), curated `instructions:`, `command:` slash-commands for `/sdlc-init`, `/sdlc-sequential`, `/sdlc-parallel`, `/sdlc-status`, `/sdlc-handoff`, `mcp:` for Playwright + GitHub, and `default_agent: sdlc-orchestrator`. Drop it at the repo root (or copy into a target project and adjust paths).
 - **[Cross-Host Compatibility & Claude Readiness](compatibility.md)** — frontmatter field matrix, tool-name aliasing, what's missing for Claude Code, the retro-compatible authoring protocol, per-role presets, and the "when to call which agent" table.
 - **[`scripts/agent-frontmatter-adapter.py`](../../scripts/agent-frontmatter-adapter.py)** — idempotent translator that turns one repo `agents/*.agent.md` into a Claude `.claude/agents/*.md`, an opencode `.opencode/agent/*.md`, or a Cursor `.cursor/rules/*.mdc` (or backports a portable superset frontmatter into the source). Powers the compatibility guide's Rule 2.
+- **[`docs/matrix.md`](../matrix.md)** — a generated, one-row-per-agent table cross-tabulating every agent against all 4 hosts and the 5 retro-compatibility rules; a one-glance audit page.
 
 ## How the asset types map
 
